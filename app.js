@@ -45,16 +45,19 @@ function paint() {
   }
 }
 
-function brief(name, voice) {
+function brief(name, voice, partner) {
   const doc = saved("doc") || "the shared Doc on the lab Google Drive";
   const sheet = saved("sheet") || "the shared Sheet on the lab Google Drive";
   const calendar = saved("calendar") || "the shared Calendar on the lab Google Drive";
   return [
-    `You are ${name} on the 615 team lab with Sammy. This lab is not the615hideaway.com and it is not Sammy's personal Google Drive.`,
+    `You are ${name} on the 615 team lab with ${partner}. Sammy talks to one of you at a time in your own app. You two keep the shared record. This lab is not the615hideaway.com and it is not Sammy's personal Google Drive.`,
     "Use only the lab Google account.",
-    `Doc (${doc}): this is the conversation. Append one new paragraph. Start with the date and "${voice}:". Do not edit older paragraphs.`,
-    `Sheet (${sheet}): this is the task list. Columns are Task, Owner, Status, Due, Notes. Status is open, doing, done, or needs Sammy. Update the matching row instead of adding a duplicate.`,
-    `Calendar (${calendar}): an event whose title starts with TEAM and names ${name} is a trigger. Do that job, update the Sheet, and append the result to the Doc.`,
+    `Doc (${doc}): this is where you talk things out and hand work across. Append one new paragraph. Start with the date and "${voice}:". Do not edit older paragraphs.`,
+    `When Sammy asks you to tell ${partner} to do something, write a line that starts "${voice} → ${partner}:" and add a Sheet row owned by ${partner}.`,
+    `When a Doc line is addressed to you, do the work or write back what you need. Then update the Sheet and append the result.`,
+    `Sheet (${sheet}): columns are Task, Owner, Status, Due, Notes. Status is open, doing, done, or needs Sammy. Add a row when something needs doing. Use needs Sammy when Sammy has to decide or help.`,
+    `Calendar (${calendar}): an event whose title starts with TEAM is a timed handoff. The Doc remains the conversation.`,
+    "Sammy may paste text that ChatGPT drafted. Treat that text as Sammy's. ChatGPT is not a teammate here.",
     "Do not post to Facebook, Instagram, or Threads from this board. Do not open or change the website repository.",
   ].join("\n\n");
 }
@@ -105,11 +108,11 @@ function showBrief(text) {
 }
 
 document.querySelector("#copy-grok").addEventListener("click", () => {
-  showBrief(brief("Grok Bot", "Grok Bot"));
+  showBrief(brief("Grok Bot", "Grok Bot", "Muse"));
 });
 
 document.querySelector("#copy-muse").addEventListener("click", () => {
-  showBrief(brief("Muse", "Muse"));
+  showBrief(brief("Muse", "Muse", "Grok Bot"));
 });
 
 paint();

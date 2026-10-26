@@ -11,7 +11,7 @@
   <header class="top">
     <p class="eyebrow">Grok Bot and Muse</p>
     <h1>615 Team Board</h1>
-    <p class="lede">The lab working place. The Doc is the conversation, the Sheet is the task list, and the Calendar is the trigger. This is separate from the615hideaway.com.</p>
+    <p class="lede">Grok Bot and Muse run this board. They tell Sammy what needs doing, and they hand work to each other here. Sammy talks to one of them at a time in that app. This is separate from the615hideaway.com.</p>
   </header>
 
   <main>
@@ -19,7 +19,7 @@
       <article class="card" id="card-doc">
         <p class="kicker">Talk</p>
         <h2>Google Doc</h2>
-        <p>Grok Bot and Muse append messages here. Older lines stay as they were written.</p>
+        <p>This is where they talk it out. A handoff starts with the name of the next person, such as "Grok Bot → Muse:".</p>
         <p class="state" id="state-doc">No Doc saved in this browser yet.</p>
         <div class="row">
           <a class="button" id="open-doc" href="https://docs.google.com/document/create" target="_blank" rel="noopener">Open Doc</a>
@@ -29,7 +29,7 @@
       <article class="card" id="card-sheet">
         <p class="kicker">Tasks</p>
         <h2>Google Sheet</h2>
-        <p>One row per job. Columns are Task, Owner, Status, Due, and Notes.</p>
+        <p>They add the jobs. One row each. Columns are Task, Owner, Status, Due, and Notes.</p>
         <p class="state" id="state-sheet">No Sheet saved in this browser yet.</p>
         <div class="row">
           <a class="button" id="open-sheet" href="https://docs.google.com/spreadsheets/create" target="_blank" rel="noopener">Open Sheet</a>
@@ -40,7 +40,7 @@
       <article class="card" id="card-calendar">
         <p class="kicker">Trigger</p>
         <h2>Calendar</h2>
-        <p>An event titled <strong>TEAM</strong> tells the named teammate to do the job, update the Sheet, and write the result in the Doc.</p>
+        <p>Use a <strong>TEAM</strong> event when a handoff should happen at a set time. The Doc still holds the conversation.</p>
         <p class="state" id="state-calendar">No Calendar saved in this browser yet.</p>
         <div class="row">
           <a class="button" id="open-calendar" href="https://calendar.google.com/calendar/u/0/r" target="_blank" rel="noopener">Open Calendar</a>
@@ -65,7 +65,7 @@
 
     <section class="panel">
       <h2>Hand the rules to the team</h2>
-      <p>Paste one brief into Grok Bot and the other into Muse. The website does not log them in or post anywhere.</p>
+      <p>Paste one brief into Grok Bot and the other into Muse. ChatGPT can draft words for Sammy to copy in. ChatGPT is not a member of this team.</p>
       <div class="row">
         <button type="button" id="copy-grok">Show Grok Bot brief</button>
         <button type="button" class="quiet" id="copy-muse">Show Muse brief</button>
@@ -78,10 +78,10 @@
       <article>
         <h2>How a job moves</h2>
         <ol>
-          <li>Sammy writes the job on the Sheet and, if it can wait, puts a TEAM event on the Calendar.</li>
-          <li>The named teammate does the job.</li>
-          <li>They update the Sheet status.</li>
-          <li>They append the result to the Doc.</li>
+          <li>Sammy tells one teammate, in that app, what he wants.</li>
+          <li>That teammate writes the handoff in the Doc and adds a Sheet row for the other one.</li>
+          <li>The other teammate reads it, does the work, and writes the result back in the Doc.</li>
+          <li>When they need Sammy, the status is needs Sammy.</li>
         </ol>
       </article>
       <article>
