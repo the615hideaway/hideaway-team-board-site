@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>615 Team Board</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <p class="eyebrow">Grok Bot and Muse</p>
+    <h1>615 Team Board</h1>
+    <p class="lede">The lab working place. The Doc is the conversation, the Sheet is the task list, and the Calendar is the trigger. This is separate from the615hideaway.com.</p>
+  </header>
+
+  <main>
+    <section class="grid" aria-label="Team tools">
+      <article class="card" id="card-doc">
+        <p class="kicker">Talk</p>
+        <h2>Google Doc</h2>
+        <p>Grok Bot and Muse append messages here. Older lines stay as they were written.</p>
+        <p class="state" id="state-doc">No Doc saved in this browser yet.</p>
+        <div class="row">
+          <a class="button" id="open-doc" href="https://docs.google.com/document/create" target="_blank" rel="noopener">Open Doc</a>
+        </div>
+      </article>
+
+      <article class="card" id="card-sheet">
+        <p class="kicker">Tasks</p>
+        <h2>Google Sheet</h2>
+        <p>One row per job. Columns are Task, Owner, Status, Due, and Notes.</p>
+        <p class="state" id="state-sheet">No Sheet saved in this browser yet.</p>
+        <div class="row">
+          <a class="button" id="open-sheet" href="https://docs.google.com/spreadsheets/create" target="_blank" rel="noopener">Open Sheet</a>
+          <a class="button quiet" href="templates/tasks.csv" download>Download starter rows</a>
+        </div>
+      </article>
+
+      <article class="card" id="card-calendar">
+        <p class="kicker">Trigger</p>
+        <h2>Calendar</h2>
+        <p>An event titled <strong>TEAM</strong> tells the named teammate to do the job, update the Sheet, and write the result in the Doc.</p>
+        <p class="state" id="state-calendar">No Calendar saved in this browser yet.</p>
+        <div class="row">
+          <a class="button" id="open-calendar" href="https://calendar.google.com/calendar/u/0/r" target="_blank" rel="noopener">Open Calendar</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2>Save the three links</h2>
+      <p>Create each file while the lab Google account is selected, then paste its address here. The links stay in this browser. They are not stored in the GitHub repository.</p>
+      <form id="links">
+        <label>Doc address<input type="url" name="doc" placeholder="https://docs.google.com/document/d/..." required></label>
+        <label>Sheet address<input type="url" name="sheet" placeholder="https://docs.google.com/spreadsheets/d/..." required></label>
+        <label>Calendar address<input type="url" name="calendar" placeholder="https://calendar.google.com/calendar/..." required></label>
+        <div class="row">
+          <button type="submit">Save links</button>
+          <button type="button" class="quiet" id="clear-links">Clear links</button>
+        </div>
+        <p class="form-note" id="form-note" role="status"></p>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>Hand the rules to the team</h2>
+      <p>Paste one brief into Grok Bot and the other into Muse. The website does not log them in or post anywhere.</p>
+      <div class="row">
+        <button type="button" id="copy-grok">Show Grok Bot brief</button>
+        <button type="button" class="quiet" id="copy-muse">Show Muse brief</button>
+      </div>
+      <textarea id="brief" readonly rows="10" aria-label="Brief to paste"></textarea>
+      <p class="form-note" id="copy-note" role="status"></p>
+    </section>
+
+    <section class="split">
+      <article>
+        <h2>How a job moves</h2>
+        <ol>
+          <li>Sammy writes the job on the Sheet and, if it can wait, puts a TEAM event on the Calendar.</li>
+          <li>The named teammate does the job.</li>
+          <li>They update the Sheet status.</li>
+          <li>They append the result to the Doc.</li>
+        </ol>
+      </article>
+      <article>
+        <h2>Status words</h2>
+        <ul>
+          <li><strong>open</strong> — nobody has started it.</li>
+          <li><strong>doing</strong> — someone is on it.</li>
+          <li><strong>done</strong> — finished.</li>
+          <li><strong>needs Sammy</strong> — waiting for a decision.</li>
+        </ul>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <p>615 Team Board. Lab only. Not the615hideaway.com.</p>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>

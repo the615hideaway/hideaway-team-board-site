@@ -1,0 +1,137 @@
+:root {
+  color-scheme: light;
+  --ink: #1d2420;
+  --muted: #556158;
+  --paper: #f4f1ea;
+  --card: #fffdf8;
+  --line: #d9d2c5;
+  --accent: #1f6b4a;
+  --accent-ink: #ffffff;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font: 17px/1.5 Georgia, "Times New Roman", serif;
+  color: var(--ink);
+  background: var(--paper);
+}
+
+.top, main, footer {
+  width: min(980px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.top { padding: 40px 0 8px; }
+
+.eyebrow, .kicker {
+  margin: 0 0 6px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+h1, h2 { line-height: 1.2; }
+
+h1 { margin: 0 0 10px; font-size: 2.4rem; }
+
+h2 { margin: 0 0 8px; font-size: 1.35rem; }
+
+.lede { max-width: 68ch; margin: 0; color: var(--muted); }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.card, .panel, .split article {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px;
+}
+
+.card p, .panel p, .split p { margin: 0 0 12px; }
+
+.state {
+  min-height: 3.2em;
+  color: var(--muted);
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.92rem;
+}
+
+.panel, .split { margin-top: 14px; }
+
+.split {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 14px;
+}
+
+ol, ul { margin: 0; padding-left: 1.2rem; }
+
+li + li { margin-top: 6px; }
+
+label {
+  display: block;
+  margin: 0 0 12px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.92rem;
+}
+
+input {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font: 16px/1.4 "Segoe UI", sans-serif;
+  background: #fff;
+}
+
+.row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+button, .button {
+  display: inline-block;
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 16px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.95rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.quiet {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+
+textarea {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font: 15px/1.45 "Segoe UI", sans-serif;
+  background: #fff;
+  resize: vertical;
+}
+
+.form-note { min-height: 1.4em; color: var(--accent); font-family: "Segoe UI", sans-serif; }
+
+footer { padding: 22px 0 40px; color: var(--muted); font-family: "Segoe UI", sans-serif; font-size: 0.9rem; }
+
+@media (max-width: 800px) {
+  .grid, .split { grid-template-columns: 1fr; }
+  h1 { font-size: 2rem; }
+}
