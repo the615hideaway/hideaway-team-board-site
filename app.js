@@ -647,6 +647,7 @@ if (panelNames.join("\n") !== recipientNames.join("\n")) {
 }
 
 const ENDPOINT_KEY = "hideaway-team-endpoint";
+const DEFAULT_ENDPOINT = "https://script.google.com/macros/s/AKfycbwCvUn4sXa0tJZmM0IVMMo1xO40EFNSTl05Bqvt20vYllKrguWDFKeI_WZCHst0VZYOvQ/exec";
 const SEATS = [...document.querySelectorAll("[data-member]")].map((panel) => panel.dataset.member);
 const KNOWN_NAMES = new Set([...SEATS, "Owner"]);
 const STANDING_PRIORITIES = [
@@ -1223,8 +1224,8 @@ document.querySelector("#sheet-clear").addEventListener("click", () => {
   } catch {
     // The address was only on this page.
   }
-  document.querySelector("#sheet-url").value = "";
-  document.querySelector("#sheet-state").textContent = "Saved web app address cleared from this browser. The password was not saved.";
+  document.querySelector("#sheet-url").value = DEFAULT_ENDPOINT;
+  document.querySelector("#sheet-state").textContent = "Browser override cleared. The team web app address is filled in. The password was not saved.";
 });
 
 document.querySelector("#sheet-refresh").addEventListener("click", async () => {
@@ -1253,10 +1254,10 @@ try {
   localStorage.removeItem("hideaway-team-calendar");
   paintLinks();
   const savedUrl = savedEndpoint();
-  if (savedUrl) {
-    document.querySelector("#sheet-url").value = savedUrl;
-    document.querySelector("#sheet-state").textContent = "A web app address is saved in this browser. The password is not saved. The board stays closed until the password is accepted.";
-  }
+  document.querySelector("#sheet-url").value = savedUrl || DEFAULT_ENDPOINT;
+  document.querySelector("#sheet-state").textContent = savedUrl && savedUrl !== DEFAULT_ENDPOINT
+    ? "A different web app address is saved in this browser. The password is not saved. The board stays closed until the password is accepted."
+    : "The team web app address is filled in. Enter the team password. It is not saved.";
 } catch {
   document.querySelector("#form-note").textContent = "This browser is not keeping the Doc or Sheet links. The rest of the page still works. Nothing was published.";
 }

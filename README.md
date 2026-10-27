@@ -2,7 +2,7 @@
 
 Public page for the 615 Hideaway AI team. It is not part of the615hideaway.com.
 
-The board stays closed until the Apps Script web app accepts the team password. The password is not in this repository, and the page does not save it. The workbook address is not in this repository.
+The board stays closed until the Apps Script web app accepts the team password. The page includes the deployed web app address. The password is not in this repository, and the page does not save it. The workbook address is not in this repository.
 
 `apps-script/Code.gs` is the bound web app. Paste it into the Apps Script project on the team workbook. Store the password in Script Properties as `TEAM_PASSWORD`. Deploy it as a web app that runs as you, with access set to anyone. The script returns rows only after that password matches.
 
