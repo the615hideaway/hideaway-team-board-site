@@ -31,7 +31,7 @@
   <main id="main">
     <section id="gate" aria-labelledby="gate-title">
       <h2 id="gate-title">Team password</h2>
-      <p>The control room stays closed until the Sheet web app accepts the team password. The password is not saved in this page or this browser.</p>
+      <p>The control room stays closed until the Sheet web app accepts the team password. A successful sign-in is remembered in this browser, including after a refresh. Sign out forgets it.</p>
       <p id="sheet-state">No Sheet records are loaded.</p>
       <p class="form-note" id="sheet-error" role="status"></p>
       <form id="sheet-form">
@@ -48,7 +48,7 @@
           <button type="submit">Open the board</button>
           <button type="button" class="quiet" id="sheet-clear">Clear saved URL</button>
         </div>
-        <p class="hint">The team web app address is filled in. The password is not saved. Leave the month blank. The web app then reads the current month in America/New_York from the tab named Board — YYYY-MM. A missing month is not replaced with another month. A refused load does not open the board.</p>
+        <p class="hint">The team web app address is filled in. This browser remembers a successful sign-in. Sign out forgets it. The password is not written into the page file or the Sheet. Leave the month blank. The web app then reads the current month in America/New_York from the tab named Board — YYYY-MM. A missing month is not replaced with another month. A refused load does not open the board.</p>
       </form>
     </section>
 
@@ -64,7 +64,7 @@
           <input id="board-month" type="text" inputmode="numeric" placeholder="YYYY-MM" autocomplete="off">
         </label>
         <button type="button" id="sheet-refresh">Refresh</button>
-        <button type="button" class="quiet" id="sheet-lock">Lock</button>
+        <button type="button" class="quiet" id="sheet-lock">Sign out</button>
       </div>
       <p id="unmatched" class="empty" hidden></p>
     </section>

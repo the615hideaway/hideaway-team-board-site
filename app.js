@@ -647,6 +647,7 @@ if (panelNames.join("\n") !== recipientNames.join("\n")) {
 }
 
 const ENDPOINT_KEY = "hideaway-team-endpoint";
+const SIGN_IN_KEY = "hideaway-team-sign-in";
 const DEFAULT_ENDPOINT = "https://script.google.com/macros/s/AKfycbwCvUn4sXa0tJZmM0IVMMo1xO40EFNSTl05Bqvt20vYllKrguWDFKeI_WZCHst0VZYOvQ/exec";
 const SEATS = [...document.querySelectorAll("[data-member]")].map((panel) => panel.dataset.member);
 const KNOWN_NAMES = new Set([...SEATS, "Owner"]);
@@ -711,6 +712,31 @@ function rememberEndpoint(url) {
     return true;
   } catch {
     return false;
+  }
+}
+
+function savedSignIn() {
+  try {
+    return localStorage.getItem(SIGN_IN_KEY) || "";
+  } catch {
+    return "";
+  }
+}
+
+function rememberSignIn(password) {
+  try {
+    localStorage.setItem(SIGN_IN_KEY, password);
+  } catch {
+    // The board can stay open for this view.
+  }
+}
+
+function forgetSignIn() {
+  sessionPassword = "";
+  try {
+    localStorage.removeItem(SIGN_IN_KEY);
+  } catch {
+    // Already gone from this view.
   }
 }
 
@@ -881,7 +907,7 @@ function showBoard() {
 }
 
 function lockBoard() {
-  sessionPassword = "";
+  forgetSignIn();
   lastGood = null;
   boardOpen = false;
   document.querySelector("#sheet-key").value = "";
@@ -890,7 +916,7 @@ function lockBoard() {
   document.querySelector(".nav").hidden = true;
   document.querySelector("#gate").hidden = false;
   document.querySelector(".skip").setAttribute("href", "#gate");
-  document.querySelector("#sheet-state").textContent = "Closed. The password was not saved.";
+  document.querySelector("#sheet-state").textContent = "Signed out. This browser forgot the sign-in.";
   document.querySelector("#sheet-key").focus();
 }
 
@@ -1171,7 +1197,7 @@ async function readSheet(password) {
     return null;
   }
   if (!password) {
-    sheetError("Enter the team password. It is not saved in this browser.");
+    sheetError("Enter the team password.");
     return null;
   }
   const monthRaw = value(boardOpen ? "#board-month" : "#sheet-month");
@@ -1207,6 +1233,7 @@ document.querySelector("#sheet-form").addEventListener("submit", async (event) =
     const data = await readSheet(password);
     if (!data || data.stale) return;
     sessionPassword = password;
+    rememberSignIn(password);
     document.querySelector("#sheet-key").value = "";
     lastGood = data;
     renderWorkbook(data, "");
@@ -1225,18 +1252,20 @@ document.querySelector("#sheet-clear").addEventListener("click", () => {
     // The address was only on this page.
   }
   document.querySelector("#sheet-url").value = DEFAULT_ENDPOINT;
-  document.querySelector("#sheet-state").textContent = "Browser override cleared. The team web app address is filled in. The password was not saved.";
+  document.querySelector("#sheet-state").textContent = "Browser override cleared. The team web app address is filled in.";
 });
 
 document.querySelector("#sheet-refresh").addEventListener("click", async () => {
   if (loadingSheet || !boardOpen || !lastGood || !sessionPassword) return;
   loadingSheet = true;
-  const warning = "Refresh failed. Showing the last read from this page session. Reload clears it.";
+  const warning = "Refresh failed. Showing the last read from this page session.";
   try {
     const data = await readSheet(sessionPassword);
     if (data && data.stale) return;
     if (!data) {
-      renderWorkbook(lastGood, "Refresh was refused. Showing the last read from this page session. Reload clears it.");
+      const refused = document.querySelector("#sheet-error").textContent.includes("refused");
+      if (refused) forgetSignIn();
+      renderWorkbook(lastGood, "Refresh was refused. Showing the last read from this page session.");
       return;
     }
     lastGood = data;
@@ -1250,14 +1279,44 @@ document.querySelector("#sheet-refresh").addEventListener("click", async () => {
 
 document.querySelector("#sheet-lock").addEventListener("click", lockBoard);
 
+async function openRemembered() {
+  if (loadingSheet || !sessionPassword) return;
+  loadingSheet = true;
+  try {
+    const data = await readSheet(sessionPassword);
+    if (data && data.stale) return;
+    if (!data) {
+      if (document.querySelector("#sheet-error").textContent.includes("refused")) forgetSignIn();
+      document.querySelector("#sheet-state").textContent = "The saved sign-in did not open the board. Enter the team password.";
+      return;
+    }
+    document.querySelector("#sheet-key").value = "";
+    lastGood = data;
+    renderWorkbook(data, "");
+    showBoard();
+  } catch {
+    document.querySelector("#sheet-state").textContent = "The saved sign-in could not reach the Sheet. It is still remembered in this browser.";
+    sheetError("The Sheet did not load. The board was not opened.");
+  } finally {
+    loadingSheet = false;
+  }
+}
+
 try {
   localStorage.removeItem("hideaway-team-calendar");
   paintLinks();
   const savedUrl = savedEndpoint();
   document.querySelector("#sheet-url").value = savedUrl || DEFAULT_ENDPOINT;
-  document.querySelector("#sheet-state").textContent = savedUrl && savedUrl !== DEFAULT_ENDPOINT
-    ? "A different web app address is saved in this browser. The password is not saved. The board stays closed until the password is accepted."
-    : "The team web app address is filled in. Enter the team password. It is not saved.";
+  const signIn = savedSignIn();
+  if (signIn) {
+    sessionPassword = signIn;
+    document.querySelector("#sheet-state").textContent = "Opening the saved sign-in for this browser.";
+    openRemembered();
+  } else {
+    document.querySelector("#sheet-state").textContent = savedUrl && savedUrl !== DEFAULT_ENDPOINT
+      ? "A different web app address is saved in this browser. Enter the team password."
+      : "The team web app address is filled in. Enter the team password.";
+  }
 } catch {
   document.querySelector("#form-note").textContent = "This browser is not keeping the Doc or Sheet links. The rest of the page still works. Nothing was published.";
 }
