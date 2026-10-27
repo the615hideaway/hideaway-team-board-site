@@ -1152,9 +1152,9 @@ function showBoard(options) {
   document.querySelector("#gate").hidden = true;
   document.querySelector("#board").hidden = false;
   document.querySelector(".nav").hidden = false;
-  document.querySelector(".skip").setAttribute("href", "#status");
+  document.querySelector(".skip").setAttribute("href", "#team");
   document.querySelector("#board-month").value = document.querySelector("#sheet-month").value;
-  if (!options || options.focus !== false) document.querySelector("#source-title").focus();
+  if (!options || options.focus !== false) document.querySelector("#team-title").focus();
 }
 
 function lockBoard() {

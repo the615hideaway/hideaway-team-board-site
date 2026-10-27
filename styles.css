@@ -107,7 +107,7 @@ h3 { margin: 0 0 8px; font-size: 1.05rem; }
 
 main { padding-bottom: 12px; }
 
-section[id] { scroll-margin-top: 72px; }
+section[id], #team-title { scroll-margin-top: 72px; }
 
 section { margin-top: 22px; }
 

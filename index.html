@@ -24,8 +24,8 @@
   </header>
 
   <nav class="nav" aria-label="Control room" hidden>
-    <a href="#status">Status</a>
     <a href="#team">Team</a>
+    <a href="#status">Status</a>
     <a href="#room">Open Room</a>
     <a href="#relay">Relay Desk</a>
     <a href="#checkins">Check-ins</a>
@@ -61,55 +61,8 @@
     </section>
 
     <div id="board" hidden>
-    <p class="limit" id="limits">The primary record is a private Google Sheet. This page reads it only through the Apps Script web app after the team password is accepted. No web app address or password is stored in the repository. Copying text does not send it or write the Sheet. Usage is not measured.</p>
-
-    <section id="source" aria-labelledby="source-title">
-      <h2 id="source-title" tabindex="-1">Sheet</h2>
-      <p id="sheet-live">No Sheet records are loaded.</p>
-      <p class="form-note" id="sheet-warning" role="status"></p>
-      <div class="row">
-        <label>Month
-          <input id="board-month" type="text" inputmode="numeric" placeholder="YYYY-MM" autocomplete="off">
-        </label>
-        <button type="button" id="sheet-refresh">Refresh</button>
-        <button type="button" class="quiet" id="sheet-lock">Sign out</button>
-      </div>
-      <p id="unmatched" class="empty" hidden></p>
-    </section>
-
-    <section id="status" aria-labelledby="status-title">
-      <h2 id="status-title">Overall status</h2>
-      <div class="status-grid">
-        <article>
-          <h3>Priorities</h3>
-          <p class="hint" id="priority-note">Shown from the owner’s instructions. Not loaded from the Sheet.</p>
-          <ul id="priority-list">
-            <li>Test this control room with the real team.</li>
-            <li>Relay records real replies in the Sheet, one row per assistant.</li>
-            <li>Keep this project off the615hideaway.com.</li>
-          </ul>
-        </article>
-        <article>
-          <h3>In progress</h3>
-          <ul id="progress-list"><li class="empty">No confirmed work in progress.</li></ul>
-        </article>
-        <article>
-          <h3>Completed</h3>
-          <ul id="completed-list"><li class="empty">No confirmed completed work.</li></ul>
-        </article>
-        <article>
-          <h3>Waiting</h3>
-          <ul id="waiting-list"><li class="empty">No confirmed item waiting on a reply.</li></ul>
-        </article>
-        <article>
-          <h3>Owner decisions</h3>
-          <p>Three decisions are waiting for Sammy. None is marked approved. <a href="#approval">Open the list.</a></p>
-        </article>
-      </div>
-    </section>
-
     <section id="team" aria-labelledby="team-title">
-      <h2 id="team-title">Team</h2>
+      <h2 id="team-title" tabindex="-1">Team</h2>
       <p class="hint">Each seat stays separate. A blank card is not a claim that someone is working. Click a seat for its Sheet history.</p>
       <p class="hint" id="muse1-note">Reports for Muse #1 currently come through the owner and are entered manually. None are recorded on this page.</p>
       <div class="seat-grid" id="seat-grid">
@@ -212,6 +165,53 @@
           <span class="seat-ago"></span>
           <span class="seat-loop" hidden>possible loop</span>
         </button>
+      </div>
+    </section>
+
+    <p class="limit" id="limits">The primary record is a private Google Sheet. This page reads it only through the Apps Script web app after the team password is accepted. No web app address or password is stored in the repository. Copying text does not send it or write the Sheet. Usage is not measured.</p>
+
+    <section id="source" aria-labelledby="source-title">
+      <h2 id="source-title" tabindex="-1">Sheet</h2>
+      <p id="sheet-live">No Sheet records are loaded.</p>
+      <p class="form-note" id="sheet-warning" role="status"></p>
+      <div class="row">
+        <label>Month
+          <input id="board-month" type="text" inputmode="numeric" placeholder="YYYY-MM" autocomplete="off">
+        </label>
+        <button type="button" id="sheet-refresh">Refresh</button>
+        <button type="button" class="quiet" id="sheet-lock">Sign out</button>
+      </div>
+      <p id="unmatched" class="empty" hidden></p>
+    </section>
+
+    <section id="status" aria-labelledby="status-title">
+      <h2 id="status-title">Overall status</h2>
+      <div class="status-grid">
+        <article>
+          <h3>Priorities</h3>
+          <p class="hint" id="priority-note">Shown from the owner’s instructions. Not loaded from the Sheet.</p>
+          <ul id="priority-list">
+            <li>Test this control room with the real team.</li>
+            <li>Relay records real replies in the Sheet, one row per assistant.</li>
+            <li>Keep this project off the615hideaway.com.</li>
+          </ul>
+        </article>
+        <article>
+          <h3>In progress</h3>
+          <ul id="progress-list"><li class="empty">No confirmed work in progress.</li></ul>
+        </article>
+        <article>
+          <h3>Completed</h3>
+          <ul id="completed-list"><li class="empty">No confirmed completed work.</li></ul>
+        </article>
+        <article>
+          <h3>Waiting</h3>
+          <ul id="waiting-list"><li class="empty">No confirmed item waiting on a reply.</li></ul>
+        </article>
+        <article>
+          <h3>Owner decisions</h3>
+          <p>Three decisions are waiting for Sammy. None is marked approved. <a href="#approval">Open the list.</a></p>
+        </article>
       </div>
     </section>
 
