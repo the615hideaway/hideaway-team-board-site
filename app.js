@@ -666,31 +666,26 @@ const STANDING_PRIORITIES = [
   "Keep this project off the615hideaway.com.",
 ];
 
-const panelDefaults = new Map();
-const rosterDefaults = new Map();
+const ROLE_TITLES = {
+  "GB": "Chief Coordinator",
+  "The Builder": "Dashboard builder",
+  "Relay": "Communications Coordinator",
+  "ChatGPT (Chad)": "Strategy and technical planning",
+  "Scout": "Independent research and verification",
+  "Claude": "Independent research",
+  "Gemini": "Independent research",
+  "Muse #1": "Facebook, Instagram, Threads",
+  "Muse #2": "Role not assigned",
+};
+
 let sessionPassword = "";
 let lastGood = null;
 let boardOpen = false;
 let loadingSheet = false;
 let requestSerial = 0;
-
-for (const panel of document.querySelectorAll("[data-member]")) {
-  const fields = {};
-  for (const block of panel.querySelectorAll("dl div")) {
-    const dd = block.querySelector("dd");
-    fields[block.querySelector("dt").textContent] = {
-      text: dd.textContent,
-      empty: dd.classList.contains("empty"),
-    };
-  }
-  panelDefaults.set(panel.dataset.member, fields);
-}
-
-for (const link of document.querySelectorAll(".roster a")) {
-  rosterDefaults.set(link.getAttribute("href"), link.querySelector(".state").textContent);
-}
-
+const seatViews = new Map();
 const muse1Note = document.querySelector("#muse1-note").textContent;
+resetSeats();
 
 function endpointUrl(raw) {
   let url;
@@ -790,16 +785,272 @@ function joinBits(parts) {
   return parts.map((part) => String(part || "").trim()).filter(Boolean).join(" · ");
 }
 
-function setField(panel, label, text, isEmpty, kind) {
-  for (const block of panel.querySelectorAll("dl div")) {
-    if (block.querySelector("dt").textContent !== label) continue;
-    const dd = block.querySelector("dd");
-    dd.textContent = text;
-    dd.classList.toggle("empty", isEmpty);
-    dd.classList.remove("is-checkin", "is-missed");
-    if (kind) dd.classList.add(kind);
+function recordedStamp(raw) {
+  const text = String(raw || "").trim();
+  if (!text) return { text: "", time: null };
+  const match = /^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2})(?::(\d{2}))?)?/.exec(text);
+  if (match) {
+    const time = Date.parse(`${match[1]}-${match[2]}-${match[3]}T${match[4] || "12"}:${match[5] || "00"}:${match[6] || "00"}`);
+    return { text, time: Number.isNaN(time) ? null : time };
+  }
+  const parsed = Date.parse(text);
+  return { text, time: Number.isNaN(parsed) ? null : parsed };
+}
+
+function daysAgoText(stamp) {
+  if (!stamp || stamp.time == null) return "";
+  const then = new Date(stamp.time);
+  const now = new Date();
+  const days = Math.round(
+    (Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())
+      - Date.UTC(then.getFullYear(), then.getMonth(), then.getDate())) / 86400000,
+  );
+  if (days < 0) return "";
+  if (days === 0) return "Last check-in today.";
+  if (days === 1) return "Last check-in 1 day ago.";
+  return `Last check-in ${days} days ago.`;
+}
+
+function newerFirst(a, b) {
+  if (a.time != null && b.time != null && a.time !== b.time) return b.time - a.time;
+  if (a.time != null && b.time == null) return -1;
+  if (a.time == null && b.time != null) return 1;
+  if (a.source === b.source) return b.index - a.index;
+  return 0;
+}
+
+function blankNeed(text) {
+  return !text || text === "No updates." || text === "No response recorded.";
+}
+
+function realCompleted(row) {
+  const text = cell(row, "Completed");
+  return blankNeed(text) ? "" : text;
+}
+
+function needsFrom(row) {
+  const parts = [];
+  const waiting = cell(row, "Waiting on");
+  const blocked = cell(row, "Blocked");
+  if (!blankNeed(waiting)) parts.push(`Waiting on: ${waiting}`);
+  if (!blankNeed(blocked)) parts.push(`Blocked: ${blocked}`);
+  return parts.join(" · ");
+}
+
+function possibleLoop(checks) {
+  const newestFirst = [...checks].reverse();
+  if (!newestFirst.length) return false;
+  const task = cell(newestFirst[0], "Working on");
+  if (blankNeed(task)) return false;
+  let count = 0;
+  for (const row of newestFirst) {
+    if (cell(row, "Working on") !== task) break;
+    if (realCompleted(row)) break;
+    count += 1;
+  }
+  return count >= 3;
+}
+
+function emptyView(name) {
+  return {
+    name,
+    role: ROLE_TITLES[name] || "",
+    empty: true,
+    working: "No check-in yet.",
+    needs: "",
+    status: "",
+    statusKind: "",
+    recorded: "",
+    ago: "",
+    loop: false,
+    taskDetail: "No check-in yet.",
+    needsDetail: "No check-in yet.",
+    completed: [],
+    history: [],
+  };
+}
+
+function seatCard(name) {
+  return [...document.querySelectorAll(".seat-card")].find((card) => card.dataset.member === name);
+}
+
+function paintSeat(view) {
+  const card = seatCard(view.name);
+  if (!card) return;
+  card.classList.toggle("is-empty", view.empty);
+  card.querySelector(".seat-role").textContent = view.role;
+  card.querySelector(".seat-name").textContent = view.name;
+  const work = card.querySelector(".seat-work");
+  work.textContent = view.working;
+  work.classList.toggle("empty", view.empty || view.working === "No current task recorded.");
+  const needs = card.querySelector(".seat-needs");
+  needs.textContent = view.needs;
+  needs.classList.toggle("empty", !view.needs || view.needs === "Nothing recorded.");
+  const badge = card.querySelector(".badge");
+  badge.textContent = view.status;
+  badge.classList.remove("is-checkin", "is-missed");
+  if (view.statusKind) badge.classList.add(view.statusKind);
+  card.querySelector(".seat-when").textContent = view.recorded;
+  card.querySelector(".seat-ago").textContent = view.ago;
+  const loop = card.querySelector(".seat-loop");
+  loop.hidden = !view.loop;
+}
+
+function closeSeatDialog() {
+  const dialog = document.querySelector("#seat-dialog");
+  if (dialog && dialog.open) dialog.close();
+}
+
+function resetSeats() {
+  closeSeatDialog();
+  seatViews.clear();
+  for (const name of SEATS) {
+    const view = emptyView(name);
+    seatViews.set(name, view);
+    paintSeat(view);
+  }
+  const note = document.querySelector("#muse1-note");
+  if (note) note.textContent = muse1Note;
+}
+
+function historyLine(source, row, extra) {
+  return joinBits([source, cell(row, "Recorded at"), ...extra]);
+}
+
+function buildSeatView(name, checks, relayRows, boardRows, findingRows) {
+  const history = [];
+  const add = (source, row, index, text, kind) => {
+    const stamp = recordedStamp(cell(row, "Recorded at"));
+    history.push({ source, index, time: stamp.time, text, kind });
+  };
+  checks.forEach((row, index) => {
+    add("checkin", row, index, historyLine("Check-ins", row, [
+      received(row) ? "Check-in received" : statusLabel(row),
+      cell(row, "Working on") ? `Working on: ${cell(row, "Working on")}` : "",
+      cell(row, "Completed") ? `Completed: ${cell(row, "Completed")}` : "",
+      cell(row, "Waiting on") ? `Waiting on: ${cell(row, "Waiting on")}` : "",
+      cell(row, "Blocked") ? `Blocked: ${cell(row, "Blocked")}` : "",
+      cell(row, "Recommendation") ? `Recommendation: ${cell(row, "Recommendation")}` : "",
+    ]), checkKind(row));
+  });
+  relayRows.forEach((row, index) => {
+    add("relay", row, index, historyLine("Relay Desk", row, [
+      cell(row, "Row kind"),
+      cell(row, "Assignment"),
+      received(row) ? "Check-in received" : statusLabel(row),
+      cell(row, "Message or reply"),
+    ]), checkKind(row));
+  });
+  boardRows.forEach((row, index) => {
+    add("board", row, index, historyLine("Board", row, [
+      cell(row, "Record type"),
+      cell(row, "Title"),
+      cell(row, "Detail"),
+      cell(row, "Status"),
+      cell(row, "Blocker or follow-up"),
+    ]), rowKind(row));
+  });
+  findingRows.forEach((row, index) => {
+    add("finding", row, index, historyLine("Findings", row, [
+      cell(row, "Title"),
+      cell(row, "Finding"),
+      cell(row, "Decision"),
+      cell(row, "Decision date"),
+      cell(row, "Uncertainty"),
+    ]), "");
+  });
+  history.sort(newerFirst);
+
+  const completed = [];
+  checks.forEach((row, index) => {
+    const done = realCompleted(row);
+    if (!received(row) || !done) return;
+    const stamp = recordedStamp(cell(row, "Recorded at"));
+    completed.push({ source: "checkin", index, time: stamp.time, text: joinBits(["Check-ins", stamp.text, done]) });
+  });
+  boardRows.forEach((row, index) => {
+    if (cell(row, "Record type") !== "Completed") return;
+    const body = joinBits([cell(row, "Title"), cell(row, "Detail")]);
+    if (!body) return;
+    const stamp = recordedStamp(cell(row, "Recorded at"));
+    completed.push({ source: "board", index, time: stamp.time, text: joinBits(["Board", stamp.text, body]) });
+  });
+  completed.sort(newerFirst);
+  const recent = completed.slice(0, 3).map((item) => item.text);
+  const latest = checks[checks.length - 1];
+  if (!latest) {
+    const view = emptyView(name);
+    view.completed = recent;
+    view.history = history;
+    return view;
+  }
+  const stamp = recordedStamp(cell(latest, "Recorded at"));
+  const working = cell(latest, "Working on");
+  const needs = needsFrom(latest);
+  return {
+    name,
+    role: ROLE_TITLES[name] || "",
+    empty: false,
+    working: working || "No current task recorded.",
+    needs: needs || "Nothing recorded.",
+    status: statusLabel(latest),
+    statusKind: checkKind(latest),
+    recorded: stamp.text,
+    ago: daysAgoText(stamp),
+    loop: possibleLoop(checks),
+    taskDetail: working || "No current task recorded.",
+    needsDetail: needs || "Nothing recorded.",
+    completed: recent,
+    history,
+  };
+}
+
+function fillSeatDialog(view) {
+  document.querySelector("#seat-dialog-title").textContent = view.name;
+  document.querySelector("#seat-dialog-role").textContent = view.role;
+  document.querySelector("#seat-dialog-task").textContent = view.taskDetail;
+  document.querySelector("#seat-dialog-needs").textContent = view.needsDetail;
+  fillList("#seat-dialog-done", view.completed, "No completed items recorded.");
+  const list = document.querySelector("#seat-dialog-history");
+  list.replaceChildren();
+  if (!view.history.length) {
+    const item = document.createElement("li");
+    item.className = "empty";
+    item.textContent = "No rows recorded.";
+    list.append(item);
     return;
   }
+  for (const entry of view.history) {
+    const item = document.createElement("li");
+    if (entry.kind) item.className = entry.kind;
+    item.textContent = entry.text;
+    list.append(item);
+  }
+}
+
+function openSeat(name) {
+  const view = seatViews.get(name);
+  if (!view) return;
+  const dialog = document.querySelector("#seat-dialog");
+  dialog.dataset.member = name;
+  fillSeatDialog(view);
+  if (!dialog.open) dialog.showModal();
+  document.querySelector("#seat-close").focus();
+}
+
+function refreshOpenSeat() {
+  const dialog = document.querySelector("#seat-dialog");
+  if (!dialog.open) return;
+  const view = seatViews.get(dialog.dataset.member || "");
+  if (!view) {
+    dialog.close();
+    return;
+  }
+  fillSeatDialog(view);
+}
+
+function stopOpening() {
+  document.documentElement.classList.remove("opening-signin");
 }
 
 function fillList(id, lines, emptyText) {
@@ -892,33 +1143,25 @@ function restoreClosedBoard() {
   const warning = document.querySelector("#sheet-warning");
   warning.classList.remove("bad");
   warning.textContent = "";
-  document.querySelector("#muse1-note").textContent = muse1Note;
-  for (const [name, fields] of panelDefaults) {
-    const panel = [...document.querySelectorAll("[data-member]")].find((item) => item.dataset.member === name);
-    for (const [label, saved] of Object.entries(fields)) setField(panel, label, saved.text, saved.empty);
-  }
-  for (const [href, text] of rosterDefaults) {
-    const state = document.querySelector(`.roster a[href="${href}"] .state`);
-    if (!state) continue;
-    state.textContent = text;
-    state.classList.remove("is-checkin", "is-missed");
-  }
+  resetSeats();
 }
 
-function showBoard() {
+function showBoard(options) {
   boardOpen = true;
+  stopOpening();
   document.querySelector("#gate").hidden = true;
   document.querySelector("#board").hidden = false;
   document.querySelector(".nav").hidden = false;
   document.querySelector(".skip").setAttribute("href", "#status");
   document.querySelector("#board-month").value = document.querySelector("#sheet-month").value;
-  document.querySelector("#source-title").focus();
+  if (!options || options.focus !== false) document.querySelector("#source-title").focus();
 }
 
 function lockBoard() {
   forgetSignIn();
   lastGood = null;
   boardOpen = false;
+  stopOpening();
   document.querySelector("#sheet-key").value = "";
   restoreClosedBoard();
   document.querySelector("#board").hidden = true;
@@ -1029,82 +1272,18 @@ function renderWorkbook(payload, warning) {
   }
 
   for (const name of SEATS) {
-    const panel = [...document.querySelectorAll("[data-member]")].find((item) => item.dataset.member === name);
     const mine = (rows) => rows.filter((row) => cell(row, "AI Name") === name);
-    const myBoard = mine(boardRows);
-    const myChecks = mine(checkins.missing ? [] : checkins.rows);
-    const myRelay = mine(relay.missing ? [] : relay.rows);
-    const inProgress = myBoard.filter((row) => cell(row, "Record type") === "In progress");
-    const assignment = inProgress.length ? boardLine(inProgress[inProgress.length - 1]) : "";
-    setField(panel, "Current assignment", assignment || "No confirmed assignment", !assignment);
-
-    const defaults = panelDefaults.get(name);
-    const latestCheck = myChecks[myChecks.length - 1];
-    const statusText = latestCheck ? statusLabel(latestCheck) : (defaults.Status.text);
-    const statusKind = latestCheck ? checkKind(latestCheck) : "";
-    setField(panel, "Status", statusText, false, statusKind);
-    const rosterState = document.querySelector(`.roster a[href="#${panel.id}"] .state`);
-    if (rosterState) {
-      rosterState.textContent = statusText;
-      rosterState.classList.remove("is-checkin", "is-missed");
-      if (statusKind) rosterState.classList.add(statusKind);
-    }
-
-    const receivedChecks = myChecks.filter(received);
-    const latestReceived = receivedChecks[receivedChecks.length - 1];
-    const checkLine = latestReceived
-      ? joinBits([
-        cell(latestReceived, "Recorded at"),
-        cell(latestReceived, "Check-in result") || "Received reply.",
-        cell(latestReceived, "Source"),
-      ])
-      : "";
-    setField(panel, "Latest confirmed check-in", checkLine || "No confirmed check-in", !checkLine);
-
-    const completed = [];
-    for (const row of myBoard) {
-      if (cell(row, "Record type") === "Completed") {
-        const line = boardLine(row);
-        if (line) completed.push(line);
-      }
-    }
-    for (const row of myChecks) {
-      if (!received(row)) continue;
-      const done = cell(row, "Completed");
-      if (done) completed.push(done);
-    }
-    for (const row of myRelay) {
-      if (!received(row) || cell(row, "Row kind").toLowerCase() !== "reply") continue;
-      const message = cell(row, "Message or reply");
-      if (message) completed.push(message);
-    }
-    setField(panel, "Completed work", completed.join(" · ") || "No confirmed completed work", !completed.length);
-
-    const needs = [];
-    for (const row of myChecks) {
-      if (received(row)) {
-        const blocked = cell(row, "Blocked");
-        const waitingOn = cell(row, "Waiting on");
-        if (blocked && blocked !== "No updates.") needs.push(blocked);
-        if (waitingOn && waitingOn !== "No updates.") needs.push(waitingOn);
-      } else {
-        needs.push(joinBits([statusLabel(row), cell(row, "Waiting on"), cell(row, "Blocked")]));
-      }
-    }
-    for (const row of myBoard) {
-      const blocker = cell(row, "Blocker or follow-up");
-      if (blocker) needs.push(blocker);
-    }
-    setField(panel, "Blockers or needs", needs.filter(Boolean).join(" · ") || "None recorded", !needs.filter(Boolean).length);
-
-    const recommendations = [];
-    for (const row of myChecks) {
-      if (!received(row)) continue;
-      const recommendation = cell(row, "Recommendation");
-      if (recommendation && recommendation !== "No updates.") recommendations.push(recommendation);
-    }
-    setField(panel, "Recommendations", recommendations.join(" · ") || "None recorded", !recommendations.length);
+    const view = buildSeatView(
+      name,
+      mine(checkins.missing ? [] : checkins.rows),
+      mine(relay.missing ? [] : relay.rows),
+      mine(boardRows),
+      mine(findings.missing ? [] : findings.rows),
+    );
+    seatViews.set(name, view);
+    paintSeat(view);
   }
+  refreshOpenSeat();
 
   const museRows = namedRows.some((row) => cell(row, "AI Name") === "Muse #1");
   document.querySelector("#muse1-note").textContent = museRows
@@ -1295,6 +1474,7 @@ async function openRemembered() {
     const data = await readSheet(sessionPassword);
     if (data && data.stale) return;
     if (!data) {
+      stopOpening();
       if (document.querySelector("#sheet-error").textContent.includes("refused")) forgetSignIn();
       document.querySelector("#sheet-state").textContent = "The saved sign-in did not open the board. Enter the team password.";
       return;
@@ -1302,8 +1482,9 @@ async function openRemembered() {
     document.querySelector("#sheet-key").value = "";
     lastGood = data;
     renderWorkbook(data, "");
-    showBoard();
+    showBoard({ focus: false });
   } catch {
+    stopOpening();
     document.querySelector("#sheet-state").textContent = "The saved sign-in could not reach the Sheet. It is still remembered in this browser.";
     sheetError("The Sheet did not load. The board was not opened.");
   } finally {
@@ -1327,6 +1508,17 @@ try {
       : "The team web app address is filled in. Enter the team password.";
   }
 } catch {
+  stopOpening();
   document.querySelector("#form-note").textContent = "This browser is not keeping the Doc or Sheet links. The rest of the page still works. Nothing was published.";
 }
 paintRecipientActions();
+
+document.querySelector("#seat-grid").addEventListener("click", (event) => {
+  const card = event.target.closest(".seat-card");
+  if (!card) return;
+  openSeat(card.dataset.member);
+});
+
+document.querySelector("#seat-dialog").addEventListener("click", (event) => {
+  if (event.target.id === "seat-dialog") event.target.close();
+});

@@ -3,6 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <script>
+    try {
+      if (localStorage.getItem("hideaway-team-sign-in")) document.documentElement.classList.add("opening-signin");
+    } catch (error) {
+      // This browser is not storing a sign-in. The password screen stays visible.
+    }
+  </script>
   <meta name="theme-color" content="#121614">
   <meta name="robots" content="noindex">
   <title>AI Team Control Room — 615 Hideaway</title>
@@ -29,6 +36,7 @@
   </nav>
 
   <main id="main">
+    <p id="opening" role="status">Opening the saved sign-in.</p>
     <section id="gate" aria-labelledby="gate-title">
       <h2 id="gate-title">Team password</h2>
       <p>The control room stays closed until the Sheet web app accepts the team password. A successful sign-in is remembered in this browser, including after a refresh. Sign out forgets it.</p>
@@ -102,146 +110,108 @@
 
     <section id="team" aria-labelledby="team-title">
       <h2 id="team-title">Team</h2>
-      <p class="hint">Each seat stays separate. A blank record is not a claim that someone is working.</p>
-      <ul class="roster">
-        <li><a href="#member-gb"><span class="who">GB</span><span class="role">Chief Coordinator</span><span class="state">Awaiting first update</span></a></li>
-        <li><a href="#member-builder"><span class="who">The Builder</span><span class="role">Dashboard builder</span><span class="state">Awaiting first update</span></a></li>
-        <li><a href="#member-relay"><span class="who">Relay</span><span class="role">Communications Coordinator</span><span class="state">Awaiting first update</span></a></li>
-        <li><a href="#member-chatgpt"><span class="who">ChatGPT (Chad)</span><span class="role">Strategy and technical planning</span><span class="state">Awaiting first update</span></a></li>
-        <li><a href="#member-scout"><span class="who">Scout</span><span class="role">Independent research and verification</span><span class="state">Awaiting first update</span></a></li>
-        <li><a href="#member-claude"><span class="who">Claude</span><span class="role">Research. Initial focus: Bluegrass Legacy stories</span><span class="state">Awaiting first update</span></a></li>
-        <li><a href="#member-gemini"><span class="who">Gemini</span><span class="role">Independent research and analysis</span><span class="state">Awaiting first update</span></a></li>
-        <li><a href="#member-muse-1"><span class="who">Muse #1</span><span class="role">Facebook, Instagram, and Threads</span><span class="state">Awaiting first update</span></a></li>
-        <li><a href="#member-muse-2"><span class="who">Muse #2</span><span class="role">Role not yet assigned</span><span class="state">Not started</span></a></li>
-      </ul>
-
-      <div class="panels">
-        <article class="member" id="member-gb" data-member="GB">
-          <h3>GB</h3>
-          <p class="role">Chief Coordinator. Organizes the mission, priorities, assignments, and progress.</p>
-          <p class="vault">Credential vault: the owner said this seat has access. Contents are not shown.</p>
-          <dl>
-            <div><dt>Current assignment</dt><dd class="empty">No confirmed assignment</dd></div>
-            <div><dt>Status</dt><dd>Awaiting first update</dd></div>
-            <div><dt>Latest confirmed check-in</dt><dd class="empty">No confirmed check-in</dd></div>
-            <div><dt>Completed work</dt><dd class="empty">No confirmed completed work</dd></div>
-            <div><dt>Blockers or needs</dt><dd class="empty">None recorded</dd></div>
-            <div><dt>Recommendations</dt><dd class="empty">None recorded</dd></div>
-          </dl>
-        </article>
-
-        <article class="member" id="member-builder" data-member="The Builder">
-          <h3>The Builder</h3>
-          <p class="role">Dashboard builder. Makes changes only within authorized scope.</p>
-          <p class="vault">Credential vault: the owner said this seat does not have access.</p>
-          <dl>
-            <div><dt>Current assignment</dt><dd>Authorized scope: Phase 1 control room in hideaway-team-board-site only.</dd></div>
-            <div><dt>Status</dt><dd>Awaiting first update</dd></div>
-            <div><dt>Latest confirmed check-in</dt><dd class="empty">No confirmed check-in</dd></div>
-            <div><dt>Completed work</dt><dd class="empty">No confirmed completed work</dd></div>
-            <div><dt>Blockers or needs</dt><dd class="empty">None recorded</dd></div>
-            <div><dt>Recommendations</dt><dd class="empty">None recorded</dd></div>
-          </dl>
-        </article>
-
-        <article class="member" id="member-relay" data-member="Relay">
-          <h3>Relay</h3>
-          <p class="role">Communications Coordinator. Carries a message only to the assistants that were selected, then brings back each reply under that assistant’s name.</p>
-          <p class="vault">Credential vault: the owner said this seat has access. Contents are not shown.</p>
-          <dl>
-            <div><dt>Current assignment</dt><dd class="empty">No confirmed assignment</dd></div>
-            <div><dt>Status</dt><dd>Awaiting first update</dd></div>
-            <div><dt>Latest confirmed check-in</dt><dd class="empty">No confirmed check-in</dd></div>
-            <div><dt>Completed work</dt><dd class="empty">No confirmed completed work</dd></div>
-            <div><dt>Blockers or needs</dt><dd class="empty">None recorded</dd></div>
-            <div><dt>Recommendations</dt><dd class="empty">None recorded</dd></div>
-          </dl>
-        </article>
-
-        <article class="member" id="member-chatgpt" data-member="ChatGPT (Chad)">
-          <h3>ChatGPT (Chad)</h3>
-          <p class="role">Strategy and technical planning. Directs this project with the owner. Not combined with Scout.</p>
-          <p class="vault">Credential vault: the owner said this seat does not have access.</p>
-          <dl>
-            <div><dt>Current assignment</dt><dd class="empty">No confirmed assignment</dd></div>
-            <div><dt>Status</dt><dd>Awaiting first update</dd></div>
-            <div><dt>Latest confirmed check-in</dt><dd class="empty">No confirmed check-in</dd></div>
-            <div><dt>Completed work</dt><dd class="empty">No confirmed completed work</dd></div>
-            <div><dt>Blockers or needs</dt><dd class="empty">None recorded</dd></div>
-            <div><dt>Recommendations</dt><dd class="empty">None recorded</dd></div>
-          </dl>
-        </article>
-
-        <article class="member" id="member-scout" data-member="Scout">
-          <h3>Scout</h3>
-          <p class="role">Independent research and verification. Not combined with ChatGPT (Chad).</p>
-          <p class="vault">Credential vault: the owner said this seat does not have access.</p>
-          <dl>
-            <div><dt>Current assignment</dt><dd class="empty">No confirmed assignment</dd></div>
-            <div><dt>Status</dt><dd>Awaiting first update</dd></div>
-            <div><dt>Latest confirmed check-in</dt><dd class="empty">No confirmed check-in</dd></div>
-            <div><dt>Completed work</dt><dd class="empty">No confirmed completed work</dd></div>
-            <div><dt>Blockers or needs</dt><dd class="empty">None recorded</dd></div>
-            <div><dt>Recommendations</dt><dd class="empty">None recorded</dd></div>
-          </dl>
-        </article>
-
-        <article class="member" id="member-claude" data-member="Claude">
-          <h3>Claude</h3>
-          <p class="role">Independent research and analysis. Initial focus: Bluegrass Legacy stories. No story work is recorded here yet.</p>
-          <p class="vault">Credential vault: the owner said this seat does not have access.</p>
-          <dl>
-            <div><dt>Current assignment</dt><dd class="empty">No confirmed assignment</dd></div>
-            <div><dt>Status</dt><dd>Awaiting first update</dd></div>
-            <div><dt>Latest confirmed check-in</dt><dd class="empty">No confirmed check-in</dd></div>
-            <div><dt>Completed work</dt><dd class="empty">No confirmed completed work</dd></div>
-            <div><dt>Blockers or needs</dt><dd class="empty">None recorded</dd></div>
-            <div><dt>Recommendations</dt><dd class="empty">None recorded</dd></div>
-          </dl>
-        </article>
-
-        <article class="member" id="member-gemini" data-member="Gemini">
-          <h3>Gemini</h3>
-          <p class="role">Independent research and analysis.</p>
-          <p class="vault">Credential vault: the owner said this seat does not have access.</p>
-          <dl>
-            <div><dt>Current assignment</dt><dd class="empty">No confirmed assignment</dd></div>
-            <div><dt>Status</dt><dd>Awaiting first update</dd></div>
-            <div><dt>Latest confirmed check-in</dt><dd class="empty">No confirmed check-in</dd></div>
-            <div><dt>Completed work</dt><dd class="empty">No confirmed completed work</dd></div>
-            <div><dt>Blockers or needs</dt><dd class="empty">None recorded</dd></div>
-            <div><dt>Recommendations</dt><dd class="empty">None recorded</dd></div>
-          </dl>
-        </article>
-
-        <article class="member" id="member-muse-1" data-member="Muse #1">
-          <h3>Muse #1</h3>
-          <p class="role">Facebook, Instagram, and Threads. This board does not post to those accounts. Not combined with Muse #2.</p>
-          <p class="vault">Credential vault: the owner said this seat does not have access.</p>
-          <p class="hint" id="muse1-note">Reports currently come through the owner and are entered manually. None are recorded on this page.</p>
-          <dl>
-            <div><dt>Current assignment</dt><dd class="empty">No confirmed assignment</dd></div>
-            <div><dt>Status</dt><dd>Awaiting first update</dd></div>
-            <div><dt>Latest confirmed check-in</dt><dd class="empty">No confirmed check-in</dd></div>
-            <div><dt>Completed work</dt><dd class="empty">No confirmed completed work</dd></div>
-            <div><dt>Blockers or needs</dt><dd class="empty">None recorded</dd></div>
-            <div><dt>Recommendations</dt><dd class="empty">None recorded</dd></div>
-          </dl>
-        </article>
-
-        <article class="member" id="member-muse-2" data-member="Muse #2">
-          <h3>Muse #2</h3>
-          <p class="role">Separate assistant. Role not yet assigned. Not combined with Muse #1.</p>
-          <p class="vault">Credential vault: the owner said this seat does not have access.</p>
-          <dl>
-            <div><dt>Current assignment</dt><dd class="empty">No confirmed assignment</dd></div>
-            <div><dt>Status</dt><dd>Not started</dd></div>
-            <div><dt>Latest confirmed check-in</dt><dd class="empty">No confirmed check-in</dd></div>
-            <div><dt>Completed work</dt><dd class="empty">No confirmed completed work</dd></div>
-            <div><dt>Blockers or needs</dt><dd class="empty">None recorded</dd></div>
-            <div><dt>Recommendations</dt><dd class="empty">None recorded</dd></div>
-          </dl>
-        </article>
+      <p class="hint">Each seat stays separate. A blank card is not a claim that someone is working. Click a seat for its Sheet history.</p>
+      <p class="hint" id="muse1-note">Reports for Muse #1 currently come through the owner and are entered manually. None are recorded on this page.</p>
+      <div class="seat-grid" id="seat-grid">
+        <button type="button" class="seat-card is-empty" id="member-gb" data-member="GB">
+          <span class="seat-role">Chief Coordinator</span>
+          <span class="seat-name">GB</span>
+          <span class="seat-kicker">Working on now</span>
+          <span class="seat-work empty">No check-in yet.</span>
+          <span class="seat-kicker">Needs from us</span>
+          <span class="seat-needs empty"></span>
+          <span class="seat-meta"><span class="badge"></span><span class="seat-when"></span></span>
+          <span class="seat-ago"></span>
+          <span class="seat-loop" hidden>possible loop</span>
+        </button>
+        <button type="button" class="seat-card is-empty" id="member-builder" data-member="The Builder">
+          <span class="seat-role">Dashboard builder</span>
+          <span class="seat-name">The Builder</span>
+          <span class="seat-kicker">Working on now</span>
+          <span class="seat-work empty">No check-in yet.</span>
+          <span class="seat-kicker">Needs from us</span>
+          <span class="seat-needs empty"></span>
+          <span class="seat-meta"><span class="badge"></span><span class="seat-when"></span></span>
+          <span class="seat-ago"></span>
+          <span class="seat-loop" hidden>possible loop</span>
+        </button>
+        <button type="button" class="seat-card is-empty" id="member-relay" data-member="Relay">
+          <span class="seat-role">Communications Coordinator</span>
+          <span class="seat-name">Relay</span>
+          <span class="seat-kicker">Working on now</span>
+          <span class="seat-work empty">No check-in yet.</span>
+          <span class="seat-kicker">Needs from us</span>
+          <span class="seat-needs empty"></span>
+          <span class="seat-meta"><span class="badge"></span><span class="seat-when"></span></span>
+          <span class="seat-ago"></span>
+          <span class="seat-loop" hidden>possible loop</span>
+        </button>
+        <button type="button" class="seat-card is-empty" id="member-chatgpt" data-member="ChatGPT (Chad)">
+          <span class="seat-role">Strategy and technical planning</span>
+          <span class="seat-name">ChatGPT (Chad)</span>
+          <span class="seat-kicker">Working on now</span>
+          <span class="seat-work empty">No check-in yet.</span>
+          <span class="seat-kicker">Needs from us</span>
+          <span class="seat-needs empty"></span>
+          <span class="seat-meta"><span class="badge"></span><span class="seat-when"></span></span>
+          <span class="seat-ago"></span>
+          <span class="seat-loop" hidden>possible loop</span>
+        </button>
+        <button type="button" class="seat-card is-empty" id="member-scout" data-member="Scout">
+          <span class="seat-role">Independent research and verification</span>
+          <span class="seat-name">Scout</span>
+          <span class="seat-kicker">Working on now</span>
+          <span class="seat-work empty">No check-in yet.</span>
+          <span class="seat-kicker">Needs from us</span>
+          <span class="seat-needs empty"></span>
+          <span class="seat-meta"><span class="badge"></span><span class="seat-when"></span></span>
+          <span class="seat-ago"></span>
+          <span class="seat-loop" hidden>possible loop</span>
+        </button>
+        <button type="button" class="seat-card is-empty" id="member-claude" data-member="Claude">
+          <span class="seat-role">Independent research</span>
+          <span class="seat-name">Claude</span>
+          <span class="seat-kicker">Working on now</span>
+          <span class="seat-work empty">No check-in yet.</span>
+          <span class="seat-kicker">Needs from us</span>
+          <span class="seat-needs empty"></span>
+          <span class="seat-meta"><span class="badge"></span><span class="seat-when"></span></span>
+          <span class="seat-ago"></span>
+          <span class="seat-loop" hidden>possible loop</span>
+        </button>
+        <button type="button" class="seat-card is-empty" id="member-gemini" data-member="Gemini">
+          <span class="seat-role">Independent research</span>
+          <span class="seat-name">Gemini</span>
+          <span class="seat-kicker">Working on now</span>
+          <span class="seat-work empty">No check-in yet.</span>
+          <span class="seat-kicker">Needs from us</span>
+          <span class="seat-needs empty"></span>
+          <span class="seat-meta"><span class="badge"></span><span class="seat-when"></span></span>
+          <span class="seat-ago"></span>
+          <span class="seat-loop" hidden>possible loop</span>
+        </button>
+        <button type="button" class="seat-card is-empty" id="member-muse-1" data-member="Muse #1">
+          <span class="seat-role">Facebook, Instagram, Threads</span>
+          <span class="seat-name">Muse #1</span>
+          <span class="seat-kicker">Working on now</span>
+          <span class="seat-work empty">No check-in yet.</span>
+          <span class="seat-kicker">Needs from us</span>
+          <span class="seat-needs empty"></span>
+          <span class="seat-meta"><span class="badge"></span><span class="seat-when"></span></span>
+          <span class="seat-ago"></span>
+          <span class="seat-loop" hidden>possible loop</span>
+        </button>
+        <button type="button" class="seat-card is-empty" id="member-muse-2" data-member="Muse #2">
+          <span class="seat-role">Role not assigned</span>
+          <span class="seat-name">Muse #2</span>
+          <span class="seat-kicker">Working on now</span>
+          <span class="seat-work empty">No check-in yet.</span>
+          <span class="seat-kicker">Needs from us</span>
+          <span class="seat-needs empty"></span>
+          <span class="seat-meta"><span class="badge"></span><span class="seat-when"></span></span>
+          <span class="seat-ago"></span>
+          <span class="seat-loop" hidden>possible loop</span>
+        </button>
       </div>
     </section>
 
@@ -631,6 +601,25 @@
   <footer>
     <p>615 Hideaway AI Team Control Room. Public page. Not the615hideaway.com. Not a credential vault. Production data is not connected.</p>
   </footer>
+  <dialog id="seat-dialog" aria-labelledby="seat-dialog-title">
+    <div class="dialog-bar">
+      <div>
+        <h2 id="seat-dialog-title"></h2>
+        <p class="hint" id="seat-dialog-role"></p>
+      </div>
+      <form method="dialog">
+        <button type="submit" class="quiet" id="seat-close">Close</button>
+      </form>
+    </div>
+    <h3>Current task</h3>
+    <p id="seat-dialog-task"></p>
+    <h3>Needs from us</h3>
+    <p id="seat-dialog-needs"></p>
+    <h3>Recently completed</h3>
+    <ul id="seat-dialog-done"></ul>
+    <h3>Full history</h3>
+    <ul id="seat-dialog-history"></ul>
+  </dialog>
   <script src="app.js"></script>
 </body>
 </html>

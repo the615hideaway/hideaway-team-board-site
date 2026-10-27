@@ -119,7 +119,7 @@ section { margin-top: 22px; }
   border-radius: 12px;
 }
 
-.status-grid, .tool-grid, .panels {
+.status-grid, .tool-grid, .seat-grid {
   display: grid;
   gap: 12px;
 }
@@ -128,11 +128,19 @@ section { margin-top: 22px; }
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
 
-.panels { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.seat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
-.card, .member, .status-grid article, form, .limit { min-width: 0; }
+@media (min-width: 900px) {
+  .seat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
 
-.status-grid article, .card, .member, form {
+@media (min-width: 1200px) {
+  .seat-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+
+.card, .status-grid article, form, .limit, .seat-card { min-width: 0; }
+
+.status-grid article, .card, form {
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 14px;
@@ -147,40 +155,150 @@ ul, ol { margin: 0; padding-left: 1.2rem; }
 
 li + li { margin-top: 6px; }
 
-.roster {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 12px;
+button.seat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 4px;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 14px;
   border: 1px solid var(--line);
   border-radius: 14px;
-  overflow: hidden;
   background: var(--card);
+  color: var(--ink);
+  font: 400 0.95rem/1.35 "Segoe UI", system-ui, sans-serif;
+  text-align: left;
+  cursor: pointer;
 }
 
-.roster a {
-  display: grid;
-  grid-template-columns: minmax(9rem, 1.1fr) minmax(0, 2fr) minmax(8rem, 1fr);
-  gap: 8px 12px;
-  padding: 12px 14px;
-  color: inherit;
-  text-decoration: none;
-  border-top: 1px solid var(--line);
+button.seat-card:hover,
+button.seat-card:focus-visible { border-color: var(--accent); }
+
+.seat-role {
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 650;
+  color: var(--accent);
 }
 
-.roster li:first-child a { border-top: 0; }
+.seat-name { font-size: 1.05rem; font-weight: 700; line-height: 1.2; }
 
-.roster .who { font-weight: 650; }
+.seat-kicker {
+  margin-top: 6px;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
 
-.roster .role, .roster .state { color: var(--muted); }
+.seat-work, .seat-needs, .seat-ago, .seat-when { color: var(--ink); }
 
-.member dl, .metrics {
+.seat-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 650;
+}
+
+.badge.is-checkin { border-color: var(--accent); color: var(--accent); }
+
+.badge.is-missed {
+  border-color: var(--missed-bar);
+  background: var(--missed-bg);
+  color: var(--missed);
+}
+
+.seat-when, .seat-ago { color: var(--muted); font-size: 0.82rem; }
+
+.seat-loop {
+  margin-top: 4px;
+  padding: 2px 8px;
+  border: 1px solid var(--limit-line);
+  border-radius: 999px;
+  background: var(--limit);
+  color: #f0d48a;
+  font-size: 0.75rem;
+  font-weight: 650;
+}
+
+.seat-card.is-empty .seat-kicker,
+.seat-card.is-empty .seat-needs,
+.seat-card.is-empty .seat-meta,
+.seat-card.is-empty .seat-ago { display: none; }
+
+.seat-loop[hidden] { display: none; }
+
+#opening {
+  display: none;
+  margin: 16px 0 0;
+  padding: 16px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+html.opening-signin #opening { display: block; }
+
+html.opening-signin #gate { display: none; }
+
+#seat-dialog {
+  width: min(40rem, calc(100vw - 24px));
+  max-height: min(85vh, 52rem);
+  margin: auto;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--card);
+  color: var(--ink);
+}
+
+#seat-dialog::backdrop { background: rgba(8, 10, 9, 0.72); }
+
+.dialog-bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dialog-bar h2 { margin: 0; }
+
+#seat-dialog form {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+
+#seat-dialog h3 { margin-top: 16px; }
+
+#seat-dialog p { margin: 0; }
+
+#seat-dialog ul { margin-top: 6px; }
+
+.metrics {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px 16px;
   margin: 12px 0 0;
 }
 
-.member dl div, .metrics div { min-width: 0; }
+.metrics div { min-width: 0; }
 
 dt {
   font-size: 0.78rem;
@@ -294,8 +412,7 @@ dd.is-checkin {
 }
 
 li.is-missed,
-dd.is-missed,
-.roster .state.is-missed {
+dd.is-missed {
   box-shadow: inset 3px 0 0 var(--missed-bar);
   background: var(--missed-bg);
   color: var(--missed);
@@ -345,8 +462,7 @@ footer {
 
 @media (max-width: 700px) {
   h1 { font-size: 1.7rem; }
-  .roster a, .member dl, .metrics, .pair, .panels { grid-template-columns: 1fr; }
-  .roster .state { font-weight: 650; }
+  .metrics, .pair, .seat-grid { grid-template-columns: 1fr; }
   .row label { flex: 1 1 100%; }
   .row > button, .row > .button { flex: 1 1 auto; }
   .checks { grid-template-columns: 1fr; }
