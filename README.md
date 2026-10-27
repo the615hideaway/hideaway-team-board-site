@@ -1,9 +1,11 @@
 # AI Team Control Room
 
-Public Phase 1 page for the 615 Hideaway AI team. It is not part of the615hideaway.com.
+Public page for the 615 Hideaway AI team. It is not part of the615hideaway.com.
 
-The page shows the real roster and honest empty states. It does not contact assistants, store replies, or read the private lab Doc or Sheet.
+The board stays closed until the Apps Script web app accepts the team password. The password is not in this repository, and the page does not save it. The workbook address is not in this repository.
 
-Doc and Sheet addresses can be saved in the browser only. Those addresses are not in this repository. Saving a link does not connect the page to that file.
+`apps-script/Code.gs` is the bound web app. Paste it into the Apps Script project on the team workbook. Store the password in Script Properties as `TEAM_PASSWORD`. Deploy it as a web app that runs as you, with access set to anyone. The script returns rows only after that password matches.
 
-GitHub Pages cannot keep a private shared record. Copy a message, paste it into that assistant's own app, then record the reply by hand.
+Copying text does not send it or write the Sheet. Usage is not measured. This page cannot contact the assistants.
+
+A Doc or Sheet address saved from the manual tools stays in that browser only. Saving a link does not connect the page.

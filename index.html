@@ -8,14 +8,14 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <a class="skip" href="#status">Skip to status</a>
+  <a class="skip" href="#gate">Skip to password</a>
   <header class="top">
     <p class="eyebrow">615 Hideaway</p>
     <h1>AI Team Control Room</h1>
-    <p class="lede">Public Phase 1. This page lists the real roster and only the activity that has been confirmed. It does not contact assistants.</p>
+    <p class="lede">The board stays closed until the team password is accepted. It lists the real roster and only activity read from the Sheet. It does not contact assistants.</p>
   </header>
 
-  <nav class="nav" aria-label="Control room">
+  <nav class="nav" aria-label="Control room" hidden>
     <a href="#status">Status</a>
     <a href="#team">Team</a>
     <a href="#room">Open Room</a>
@@ -28,31 +28,69 @@
   </nav>
 
   <main id="main">
-    <p class="limit" id="limits">This page is not connected to the private lab Sheet or Comms Test Doc. Copying text does not send it. A reply is not on the board until a person records it in the shared file and that record is published here. No check-ins, replies, findings, or usage figures are on this page.</p>
+    <section id="gate" aria-labelledby="gate-title">
+      <h2 id="gate-title">Team password</h2>
+      <p>The control room stays closed until the Sheet web app accepts the team password. The password is not saved in this page or this browser.</p>
+      <p id="sheet-state">No Sheet records are loaded.</p>
+      <p class="form-note" id="sheet-error" role="status"></p>
+      <form id="sheet-form">
+        <label>Apps Script web app URL
+          <input id="sheet-url" type="url" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off" spellcheck="false">
+        </label>
+        <label>Team password
+          <input id="sheet-key" type="password" autocomplete="new-password" spellcheck="false">
+        </label>
+        <label>Month
+          <input id="sheet-month" type="text" inputmode="numeric" placeholder="YYYY-MM" autocomplete="off">
+        </label>
+        <div class="row">
+          <button type="submit">Open the board</button>
+          <button type="button" class="quiet" id="sheet-clear">Clear saved URL</button>
+        </div>
+        <p class="hint">The web app address can stay in this browser. The password is not saved. Leave the month blank. The web app then reads the current month in America/New_York from the tab named Board — YYYY-MM. A missing month is not replaced with another month. A refused load does not open the board.</p>
+      </form>
+    </section>
+
+    <div id="board" hidden>
+    <p class="limit" id="limits">The primary record is a private Google Sheet. This page reads it only through the Apps Script web app after the team password is accepted. No web app address or password is stored in the repository. Copying text does not send it or write the Sheet. Usage is not measured.</p>
+
+    <section id="source" aria-labelledby="source-title">
+      <h2 id="source-title" tabindex="-1">Sheet</h2>
+      <p id="sheet-live">No Sheet records are loaded.</p>
+      <p class="form-note" id="sheet-warning" role="status"></p>
+      <div class="row">
+        <label>Month
+          <input id="board-month" type="text" inputmode="numeric" placeholder="YYYY-MM" autocomplete="off">
+        </label>
+        <button type="button" id="sheet-refresh">Refresh</button>
+        <button type="button" class="quiet" id="sheet-lock">Lock</button>
+      </div>
+      <p id="unmatched" class="empty" hidden></p>
+    </section>
 
     <section id="status" aria-labelledby="status-title">
       <h2 id="status-title">Overall status</h2>
       <div class="status-grid">
         <article>
           <h3>Priorities</h3>
-          <p class="hint">Set by the owner for this phase.</p>
-          <ul>
-            <li>Test this Phase 1 control room with the real team.</li>
-            <li>Carry messages by hand. Relay copies text into the selected assistant’s own app.</li>
+          <p class="hint" id="priority-note">Shown from the owner’s instructions. Not loaded from the Sheet.</p>
+          <ul id="priority-list">
+            <li>Test this control room with the real team.</li>
+            <li>Relay records real replies in the Sheet, one row per assistant.</li>
             <li>Keep this project off the615hideaway.com.</li>
           </ul>
         </article>
         <article>
           <h3>In progress</h3>
-          <p class="empty">No confirmed work in progress.</p>
+          <ul id="progress-list"><li class="empty">No confirmed work in progress.</li></ul>
         </article>
         <article>
           <h3>Completed</h3>
-          <p class="empty">No confirmed completed work.</p>
+          <ul id="completed-list"><li class="empty">No confirmed completed work.</li></ul>
         </article>
         <article>
           <h3>Waiting</h3>
-          <p class="empty">No confirmed item waiting on a reply.</p>
+          <ul id="waiting-list"><li class="empty">No confirmed item waiting on a reply.</li></ul>
         </article>
         <article>
           <h3>Owner decisions</h3>
@@ -179,7 +217,7 @@
           <h3>Muse #1</h3>
           <p class="role">Facebook, Instagram, and Threads. This board does not post to those accounts. Not combined with Muse #2.</p>
           <p class="vault">Credential vault: the owner said this seat does not have access.</p>
-          <p class="hint">Reports currently come through the owner and are entered manually. None are recorded on this page.</p>
+          <p class="hint" id="muse1-note">Reports currently come through the owner and are entered manually. None are recorded on this page.</p>
           <dl>
             <div><dt>Current assignment</dt><dd class="empty">No confirmed assignment</dd></div>
             <div><dt>Status</dt><dd>Awaiting first update</dd></div>
@@ -244,6 +282,7 @@
       <ol class="steps">
         <li>The owner or GB writes the assignment.</li>
         <li>Select the recipients. Relay contacts only those seats.</li>
+        <li>Each reply is its own Sheet row, with that assistant’s AI Name. A missing reply stays missing.</li>
         <li>Copy one message and paste it into that assistant’s own app.</li>
         <li>When a reply actually exists, record it below. The panels above do not change from this form.</li>
       </ol>
@@ -321,11 +360,11 @@
           <label>Status
             <select id="reply-status" name="status">
               <option value="">Choose</option>
-              <option>Not yet requested</option>
-              <option>Waiting</option>
-              <option>Received</option>
-              <option>Failed</option>
-              <option>Unavailable</option>
+              <option>not requested</option>
+              <option>waiting</option>
+              <option>received</option>
+              <option>failed</option>
+              <option>unavailable</option>
             </select>
           </label>
           <label class="checkline"><input id="reply-no-updates" type="checkbox"> No updates</label>
@@ -354,12 +393,15 @@
         </label>
         <p class="form-note" id="reply-note" role="status"></p>
       </form>
+      <h3>Loaded Relay rows</h3>
+      <ul id="relay-log"><li class="empty">No Relay rows loaded.</li></ul>
     </section>
 
     <section id="checkins" aria-labelledby="checkins-title">
       <h2 id="checkins-title">Check-ins</h2>
-      <p class="empty">No check-ins recorded. A missing reply is not a completed check-in.</p>
-      <p class="hint">Manual only. Nothing here runs on a schedule. “No updates” is a real reply. Failed, unavailable, waiting, and not yet requested are not completed check-ins.</p>
+      <p class="empty" id="checkin-empty">No check-ins recorded. A missing reply is not a completed check-in.</p>
+      <ul id="checkin-log"></ul>
+      <p class="hint">Manual only. Nothing here runs on a schedule. “No updates” is a real reply only when the status is received. Failed, unavailable, waiting, and not requested are not completed check-ins.</p>
       <form id="check-form">
         <div class="pair">
           <label>Assistant
@@ -389,11 +431,11 @@
           <label>Status
             <select id="check-status" name="status">
               <option value="">Choose</option>
-              <option>Not yet requested</option>
-              <option>Waiting</option>
-              <option>Received</option>
-              <option>Failed</option>
-              <option>Unavailable</option>
+              <option>not requested</option>
+              <option>waiting</option>
+              <option>received</option>
+              <option>failed</option>
+              <option>unavailable</option>
             </select>
           </label>
           <label class="checkline"><input id="check-no-updates" type="checkbox"> No updates</label>
@@ -435,7 +477,8 @@
 
     <section id="findings" aria-labelledby="findings-title">
       <h2 id="findings-title">Findings and history</h2>
-      <p class="empty">No findings, decisions, or assignment history on this page.</p>
+      <p class="empty" id="finding-empty">No findings, decisions, or assignment history on this page.</p>
+      <ul id="finding-log"></ul>
       <p class="hint">Keep the source on the record. If something is uncertain, say so. Do not paste a private file address.</p>
       <form id="finding-form">
         <label>Title
@@ -471,6 +514,9 @@
         <label>Decision
           <textarea id="finding-decision" rows="2"></textarea>
         </label>
+        <label>Decision date
+          <input id="finding-decision-date" type="date">
+        </label>
         <label>Notes
           <textarea id="finding-notes" rows="3"></textarea>
         </label>
@@ -501,15 +547,16 @@
 
     <section id="approval" aria-labelledby="approval-title">
       <h2 id="approval-title">Waiting for Sammy</h2>
-      <p class="hint">Owner approval. Nothing in this list is marked decided.</p>
+      <p class="hint">Owner approval. The three items below were stated by the owner. They are not Sheet rows, and none is marked decided.</p>
+      <ul id="sheet-decisions"><li class="empty">No owner-decision rows loaded from the Sheet.</li></ul>
       <ol class="decisions">
         <li>
           <p><strong>Assign Muse #2 a role.</strong></p>
           <p>Not decided. Muse #2 stays separate from Muse #1.</p>
         </li>
         <li>
-          <p><strong>Verify the private lab Sheet and Comms Test Doc.</strong></p>
-          <p>Not verified. They are the intended shared record. This page is not connected to either file.</p>
+          <p><strong>Confirm the Sheet is the shared record and deploy its web app.</strong></p>
+          <p>Not decided. The Doc is no longer the primary record. This page is not reading the Sheet until the web app is deployed and the team password is accepted.</p>
         </li>
         <li>
           <p><strong>Automatic check-ins.</strong></p>
@@ -520,7 +567,7 @@
 
     <section id="tools" aria-labelledby="tools-title">
       <h2 id="tools-title">Manual tools</h2>
-      <p class="hint">Doc and Sheet addresses saved here stay in this browser. They are not the team record, they are not shared, and they are not written to the repository. Clearing site data removes them. Saving a link does not connect the board to that file.</p>
+      <p class="hint">A Doc or Sheet address saved here stays in this browser. It is not written to the repository, and saving it does not connect this page to that file. The Sheet is read only after the team password is accepted.</p>
       <div class="tool-grid">
         <article class="card" id="card-doc">
           <h3>Google Doc</h3>
@@ -530,11 +577,14 @@
         </article>
         <article class="card" id="card-sheet">
           <h3>Google Sheet</h3>
-          <p>Intended home for the shared rows, after access is verified.</p>
+          <p>Primary team record. Its address is not in this repository. Saving a link here does not connect the board.</p>
           <p class="state" id="state-sheet">No Sheet saved in this browser yet.</p>
           <div class="row">
             <a class="button" id="open-sheet" href="https://docs.google.com/spreadsheets/create" target="_blank" rel="noopener">Create Sheet</a>
-            <a class="button quiet" href="templates/tasks.csv" download>Download column headers</a>
+            <a class="button quiet" href="templates/board.csv" download>Board headers</a>
+            <a class="button quiet" href="templates/check-ins.csv" download>Check-in headers</a>
+            <a class="button quiet" href="templates/relay-desk.csv" download>Relay headers</a>
+            <a class="button quiet" href="templates/findings.csv" download>Finding headers</a>
           </div>
         </article>
       </div>
@@ -574,6 +624,7 @@
         <p class="form-note" id="copy-note" role="status"></p>
       </form>
     </section>
+    </div>
   </main>
 
   <footer>

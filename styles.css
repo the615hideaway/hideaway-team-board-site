@@ -262,6 +262,35 @@ textarea { resize: vertical; }
 
 .form-note { min-height: 1.4em; margin: 0; color: var(--accent); }
 
+.form-note.bad { color: #8d2b2b; }
+
+li.is-checkin,
+dd.is-checkin {
+  box-shadow: inset 3px 0 0 var(--accent);
+  padding-left: 8px;
+}
+
+li.is-missed,
+dd.is-missed,
+.roster .state.is-missed {
+  box-shadow: inset 3px 0 0 #8d2b2b;
+  background: #f8efef;
+  color: #6e2e2e;
+  padding-left: 8px;
+}
+
+.sheet-note { margin: 12px 0 0; }
+
+.nav[hidden],
+#board[hidden],
+#gate[hidden] {
+  display: none;
+}
+
+#gate { margin-top: 16px; }
+
+#sheet-live { margin-top: 0; }
+
 .steps { margin-bottom: 12px; }
 
 .decisions { list-style: none; padding: 0; }
