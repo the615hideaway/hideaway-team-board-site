@@ -4,100 +4,580 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
-  <title>615 Team Board</title>
+  <title>AI Team Control Room — 615 Hideaway</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <a class="skip" href="#status">Skip to status</a>
   <header class="top">
-    <p class="eyebrow">Grok Bot and Muse</p>
-    <h1>615 Team Board</h1>
-    <p class="lede">Grok Bot and Muse run this board. They tell Sammy what needs doing, and they hand work to each other here. Sammy talks to one of them at a time in that app. This is separate from the615hideaway.com.</p>
+    <p class="eyebrow">615 Hideaway</p>
+    <h1>AI Team Control Room</h1>
+    <p class="lede">Public Phase 1. This page lists the real roster and only the activity that has been confirmed. It does not contact assistants.</p>
   </header>
 
-  <main>
-    <section class="grid" aria-label="Team tools">
-      <article class="card" id="card-doc">
-        <p class="kicker">Talk</p>
-        <h2>Google Doc</h2>
-        <p>This is where they talk it out. A handoff starts with the name of the next person, such as "Grok Bot → Muse:".</p>
-        <p class="state" id="state-doc">No Doc saved in this browser yet.</p>
-        <div class="row">
-          <a class="button" id="open-doc" href="https://docs.google.com/document/create" target="_blank" rel="noopener">Open Doc</a>
-        </div>
-      </article>
+  <nav class="nav" aria-label="Control room">
+    <a href="#status">Status</a>
+    <a href="#team">Team</a>
+    <a href="#room">Open Room</a>
+    <a href="#relay">Relay Desk</a>
+    <a href="#checkins">Check-ins</a>
+    <a href="#findings">Findings</a>
+    <a href="#usage">Usage</a>
+    <a href="#approval">For Sammy</a>
+    <a href="#tools">Manual tools</a>
+  </nav>
 
-      <article class="card" id="card-sheet">
-        <p class="kicker">Tasks</p>
-        <h2>Google Sheet</h2>
-        <p>They add the jobs. One row each. Columns are Task, Owner, Status, Due, and Notes.</p>
-        <p class="state" id="state-sheet">No Sheet saved in this browser yet.</p>
-        <div class="row">
-          <a class="button" id="open-sheet" href="https://docs.google.com/spreadsheets/create" target="_blank" rel="noopener">Open Sheet</a>
-          <a class="button quiet" href="templates/tasks.csv" download>Download starter rows</a>
-        </div>
-      </article>
+  <main id="main">
+    <p class="limit" id="limits">This page is not connected to the private lab Sheet or Comms Test Doc. Copying text does not send it. A reply is not on the board until a person records it in the shared file and that record is published here. No check-ins, replies, findings, or usage figures are on this page.</p>
 
-      <article class="card" id="card-calendar">
-        <p class="kicker">Trigger</p>
-        <h2>Calendar</h2>
-        <p>Use a <strong>TEAM</strong> event when a handoff should happen at a set time. The Doc still holds the conversation.</p>
-        <p class="state" id="state-calendar">No Calendar saved in this browser yet.</p>
-        <div class="row">
-          <a class="button" id="open-calendar" href="https://calendar.google.com/calendar/u/0/r" target="_blank" rel="noopener">Open Calendar</a>
-        </div>
-      </article>
+    <section id="status" aria-labelledby="status-title">
+      <h2 id="status-title">Overall status</h2>
+      <div class="status-grid">
+        <article>
+          <h3>Priorities</h3>
+          <p class="hint">Set by the owner for this phase.</p>
+          <ul>
+            <li>Test this Phase 1 control room with the real team.</li>
+            <li>Carry messages by hand. Relay copies text into the selected assistant’s own app.</li>
+            <li>Keep this project off the615hideaway.com.</li>
+          </ul>
+        </article>
+        <article>
+          <h3>In progress</h3>
+          <p class="empty">No confirmed work in progress.</p>
+        </article>
+        <article>
+          <h3>Completed</h3>
+          <p class="empty">No confirmed completed work.</p>
+        </article>
+        <article>
+          <h3>Waiting</h3>
+          <p class="empty">No confirmed item waiting on a reply.</p>
+        </article>
+        <article>
+          <h3>Owner decisions</h3>
+          <p>Three decisions are waiting for Sammy. None is marked approved. <a href="#approval">Open the list.</a></p>
+        </article>
+      </div>
     </section>
 
-    <section class="panel">
-      <h2>Save the three links</h2>
-      <p>Create each file while the lab Google account is selected, then paste its address here. The links stay in this browser. They are not stored in the GitHub repository.</p>
+    <section id="team" aria-labelledby="team-title">
+      <h2 id="team-title">Team</h2>
+      <p class="hint">Each seat stays separate. A blank record is not a claim that someone is working.</p>
+      <ul class="roster">
+        <li><a href="#member-gb"><span class="who">GB</span><span class="role">Chief Coordinator</span><span class="state">Awaiting first update</span></a></li>
+        <li><a href="#member-builder"><span class="who">The Builder</span><span class="role">Dashboard builder</span><span class="state">Awaiting first update</span></a></li>
+        <li><a href="#member-relay"><span class="who">Relay</span><span class="role">Communications Coordinator</span><span class="state">Awaiting first update</span></a></li>
+        <li><a href="#member-chatgpt"><span class="who">ChatGPT (Chad)</span><span class="role">Strategy and technical planning</span><span class="state">Awaiting first update</span></a></li>
+        <li><a href="#member-scout"><span class="who">Scout</span><span class="role">Independent research and verification</span><span class="state">Awaiting first update</span></a></li>
+        <li><a href="#member-claude"><span class="who">Claude</span><span class="role">Research. Initial focus: Bluegrass Legacy stories</span><span class="state">Awaiting first update</span></a></li>
+        <li><a href="#member-gemini"><span class="who">Gemini</span><span class="role">Independent research and analysis</span><span class="state">Awaiting first update</span></a></li>
+        <li><a href="#member-muse-1"><span class="who">Muse #1</span><span class="role">Facebook, Instagram, and Threads</span><span class="state">Awaiting first update</span></a></li>
+        <li><a href="#member-muse-2"><span class="who">Muse #2</span><span class="role">Role not yet assigned</span><span class="state">Not started</span></a></li>
+      </ul>
+
+      <div class="panels">
+        <article class="member" id="member-gb" data-member="GB">
+          <h3>GB</h3>
+          <p class="role">Chief Coordinator. Organizes the mission, priorities, assignments, and progress.</p>
+          <p class="vault">Credential vault: the owner said this seat has access. Contents are not shown.</p>
+          <dl>
+            <div><dt>Current assignment</dt><dd class="empty">No confirmed assignment</dd></div>
+            <div><dt>Status</dt><dd>Awaiting first update</dd></div>
+            <div><dt>Latest confirmed check-in</dt><dd class="empty">No confirmed check-in</dd></div>
+            <div><dt>Completed work</dt><dd class="empty">No confirmed completed work</dd></div>
+            <div><dt>Blockers or needs</dt><dd class="empty">None recorded</dd></div>
+            <div><dt>Recommendations</dt><dd class="empty">None recorded</dd></div>
+          </dl>
+        </article>
+
+        <article class="member" id="member-builder" data-member="The Builder">
+          <h3>The Builder</h3>
+          <p class="role">Dashboard builder. Makes changes only within authorized scope.</p>
+          <p class="vault">Credential vault: the owner said this seat does not have access.</p>
+          <dl>
+            <div><dt>Current assignment</dt><dd>Authorized scope: Phase 1 control room in hideaway-team-board-site only.</dd></div>
+            <div><dt>Status</dt><dd>Awaiting first update</dd></div>
+            <div><dt>Latest confirmed check-in</dt><dd class="empty">No confirmed check-in</dd></div>
+            <div><dt>Completed work</dt><dd class="empty">No confirmed completed work</dd></div>
+            <div><dt>Blockers or needs</dt><dd class="empty">None recorded</dd></div>
+            <div><dt>Recommendations</dt><dd class="empty">None recorded</dd></div>
+          </dl>
+        </article>
+
+        <article class="member" id="member-relay" data-member="Relay">
+          <h3>Relay</h3>
+          <p class="role">Communications Coordinator. Carries a message only to the assistants that were selected, then brings back each reply under that assistant’s name.</p>
+          <p class="vault">Credential vault: the owner said this seat has access. Contents are not shown.</p>
+          <dl>
+            <div><dt>Current assignment</dt><dd class="empty">No confirmed assignment</dd></div>
+            <div><dt>Status</dt><dd>Awaiting first update</dd></div>
+            <div><dt>Latest confirmed check-in</dt><dd class="empty">No confirmed check-in</dd></div>
+            <div><dt>Completed work</dt><dd class="empty">No confirmed completed work</dd></div>
+            <div><dt>Blockers or needs</dt><dd class="empty">None recorded</dd></div>
+            <div><dt>Recommendations</dt><dd class="empty">None recorded</dd></div>
+          </dl>
+        </article>
+
+        <article class="member" id="member-chatgpt" data-member="ChatGPT (Chad)">
+          <h3>ChatGPT (Chad)</h3>
+          <p class="role">Strategy and technical planning. Directs this project with the owner. Not combined with Scout.</p>
+          <p class="vault">Credential vault: the owner said this seat does not have access.</p>
+          <dl>
+            <div><dt>Current assignment</dt><dd class="empty">No confirmed assignment</dd></div>
+            <div><dt>Status</dt><dd>Awaiting first update</dd></div>
+            <div><dt>Latest confirmed check-in</dt><dd class="empty">No confirmed check-in</dd></div>
+            <div><dt>Completed work</dt><dd class="empty">No confirmed completed work</dd></div>
+            <div><dt>Blockers or needs</dt><dd class="empty">None recorded</dd></div>
+            <div><dt>Recommendations</dt><dd class="empty">None recorded</dd></div>
+          </dl>
+        </article>
+
+        <article class="member" id="member-scout" data-member="Scout">
+          <h3>Scout</h3>
+          <p class="role">Independent research and verification. Not combined with ChatGPT (Chad).</p>
+          <p class="vault">Credential vault: the owner said this seat does not have access.</p>
+          <dl>
+            <div><dt>Current assignment</dt><dd class="empty">No confirmed assignment</dd></div>
+            <div><dt>Status</dt><dd>Awaiting first update</dd></div>
+            <div><dt>Latest confirmed check-in</dt><dd class="empty">No confirmed check-in</dd></div>
+            <div><dt>Completed work</dt><dd class="empty">No confirmed completed work</dd></div>
+            <div><dt>Blockers or needs</dt><dd class="empty">None recorded</dd></div>
+            <div><dt>Recommendations</dt><dd class="empty">None recorded</dd></div>
+          </dl>
+        </article>
+
+        <article class="member" id="member-claude" data-member="Claude">
+          <h3>Claude</h3>
+          <p class="role">Independent research and analysis. Initial focus: Bluegrass Legacy stories. No story work is recorded here yet.</p>
+          <p class="vault">Credential vault: the owner said this seat does not have access.</p>
+          <dl>
+            <div><dt>Current assignment</dt><dd class="empty">No confirmed assignment</dd></div>
+            <div><dt>Status</dt><dd>Awaiting first update</dd></div>
+            <div><dt>Latest confirmed check-in</dt><dd class="empty">No confirmed check-in</dd></div>
+            <div><dt>Completed work</dt><dd class="empty">No confirmed completed work</dd></div>
+            <div><dt>Blockers or needs</dt><dd class="empty">None recorded</dd></div>
+            <div><dt>Recommendations</dt><dd class="empty">None recorded</dd></div>
+          </dl>
+        </article>
+
+        <article class="member" id="member-gemini" data-member="Gemini">
+          <h3>Gemini</h3>
+          <p class="role">Independent research and analysis.</p>
+          <p class="vault">Credential vault: the owner said this seat does not have access.</p>
+          <dl>
+            <div><dt>Current assignment</dt><dd class="empty">No confirmed assignment</dd></div>
+            <div><dt>Status</dt><dd>Awaiting first update</dd></div>
+            <div><dt>Latest confirmed check-in</dt><dd class="empty">No confirmed check-in</dd></div>
+            <div><dt>Completed work</dt><dd class="empty">No confirmed completed work</dd></div>
+            <div><dt>Blockers or needs</dt><dd class="empty">None recorded</dd></div>
+            <div><dt>Recommendations</dt><dd class="empty">None recorded</dd></div>
+          </dl>
+        </article>
+
+        <article class="member" id="member-muse-1" data-member="Muse #1">
+          <h3>Muse #1</h3>
+          <p class="role">Facebook, Instagram, and Threads. This board does not post to those accounts. Not combined with Muse #2.</p>
+          <p class="vault">Credential vault: the owner said this seat does not have access.</p>
+          <p class="hint">Reports currently come through the owner and are entered manually. None are recorded on this page.</p>
+          <dl>
+            <div><dt>Current assignment</dt><dd class="empty">No confirmed assignment</dd></div>
+            <div><dt>Status</dt><dd>Awaiting first update</dd></div>
+            <div><dt>Latest confirmed check-in</dt><dd class="empty">No confirmed check-in</dd></div>
+            <div><dt>Completed work</dt><dd class="empty">No confirmed completed work</dd></div>
+            <div><dt>Blockers or needs</dt><dd class="empty">None recorded</dd></div>
+            <div><dt>Recommendations</dt><dd class="empty">None recorded</dd></div>
+          </dl>
+        </article>
+
+        <article class="member" id="member-muse-2" data-member="Muse #2">
+          <h3>Muse #2</h3>
+          <p class="role">Separate assistant. Role not yet assigned. Not combined with Muse #1.</p>
+          <p class="vault">Credential vault: the owner said this seat does not have access.</p>
+          <dl>
+            <div><dt>Current assignment</dt><dd class="empty">No confirmed assignment</dd></div>
+            <div><dt>Status</dt><dd>Not started</dd></div>
+            <div><dt>Latest confirmed check-in</dt><dd class="empty">No confirmed check-in</dd></div>
+            <div><dt>Completed work</dt><dd class="empty">No confirmed completed work</dd></div>
+            <div><dt>Blockers or needs</dt><dd class="empty">None recorded</dd></div>
+            <div><dt>Recommendations</dt><dd class="empty">None recorded</dd></div>
+          </dl>
+        </article>
+      </div>
+    </section>
+
+    <section id="room" aria-labelledby="room-title">
+      <h2 id="room-title">Open Room</h2>
+      <p class="empty">No messages on this page.</p>
+      <p class="hint">A line prepared here is not posted. Copy it into the Comms Test Doc after access to that doc is verified. Author and time stay on the copied line.</p>
+      <form id="room-form">
+        <label>Author
+          <select id="room-author" name="author">
+            <option value="">Choose</option>
+            <option>Owner</option>
+            <option>GB</option>
+            <option>The Builder</option>
+            <option>Relay</option>
+            <option>ChatGPT (Chad)</option>
+            <option>Scout</option>
+            <option>Claude</option>
+            <option>Gemini</option>
+            <option>Muse #1</option>
+            <option>Muse #2</option>
+          </select>
+        </label>
+        <label>Message
+          <textarea id="room-body" name="body" rows="4"></textarea>
+        </label>
+        <div class="row">
+          <button type="button" id="room-copy">Copy message</button>
+        </div>
+        <label>Preview. Not saved.
+          <textarea id="room-preview" class="preview" readonly rows="6"></textarea>
+        </label>
+        <p class="form-note" id="room-note" role="status"></p>
+      </form>
+    </section>
+
+    <section id="relay" aria-labelledby="relay-heading">
+      <h2 id="relay-heading">Relay Desk</h2>
+      <ol class="steps">
+        <li>The owner or GB writes the assignment.</li>
+        <li>Select the recipients. Relay contacts only those seats.</li>
+        <li>Copy one message and paste it into that assistant’s own app.</li>
+        <li>When a reply actually exists, record it below. The panels above do not change from this form.</li>
+      </ol>
+
+      <form id="relay-form">
+        <h3>Draft</h3>
+        <label>From
+          <select id="relay-from" name="from">
+            <option value="">Choose</option>
+            <option>Owner</option>
+            <option>GB</option>
+          </select>
+        </label>
+        <label>Assignment
+          <input id="relay-title" name="title" type="text" autocomplete="off">
+        </label>
+        <label>Message
+          <textarea id="relay-body" name="body" rows="5"></textarea>
+        </label>
+        <fieldset>
+          <legend>Recipients</legend>
+          <div class="checks">
+            <label><input type="checkbox" name="recipient" value="GB"> GB</label>
+            <label><input type="checkbox" name="recipient" value="The Builder"> The Builder</label>
+            <label><input type="checkbox" name="recipient" value="Relay"> Relay</label>
+            <label><input type="checkbox" name="recipient" value="ChatGPT (Chad)"> ChatGPT (Chad)</label>
+            <label><input type="checkbox" name="recipient" value="Scout"> Scout</label>
+            <label><input type="checkbox" name="recipient" value="Claude"> Claude</label>
+            <label><input type="checkbox" name="recipient" value="Gemini"> Gemini</label>
+            <label><input type="checkbox" name="recipient" value="Muse #1"> Muse #1</label>
+            <label><input type="checkbox" name="recipient" value="Muse #2"> Muse #2</label>
+          </div>
+        </fieldset>
+        <div class="row" id="relay-actions"></div>
+        <label>Preview. Not saved and not sent.
+          <textarea id="relay-preview" class="preview" readonly rows="8"></textarea>
+        </label>
+        <p class="form-note" id="relay-note" role="status"></p>
+      </form>
+
+      <form id="reply-form">
+        <h3>Record a reply</h3>
+        <p class="hint">You are stating what happened. Copying this record does not put it on the team panels. Status stays whatever you choose. The page will not mark a reply received on its own.</p>
+        <div class="row">
+          <button type="button" class="quiet" id="use-draft-title">Use the draft title</button>
+        </div>
+        <label>Assignment
+          <input id="reply-assignment" name="assignment" type="text" autocomplete="off">
+        </label>
+        <div class="pair">
+          <label>Author
+            <select id="reply-author" name="author">
+              <option value="">Choose</option>
+              <option>GB</option>
+              <option>The Builder</option>
+              <option>Relay</option>
+              <option>ChatGPT (Chad)</option>
+              <option>Scout</option>
+              <option>Claude</option>
+              <option>Gemini</option>
+              <option>Muse #1</option>
+              <option>Muse #2</option>
+            </select>
+          </label>
+          <label>Entered by
+            <select id="reply-entered-by" name="entered-by">
+              <option value="">Choose</option>
+              <option>Owner</option>
+              <option>GB</option>
+              <option>Relay</option>
+            </select>
+          </label>
+        </div>
+        <div class="pair">
+          <label>Status
+            <select id="reply-status" name="status">
+              <option value="">Choose</option>
+              <option>Not yet requested</option>
+              <option>Waiting</option>
+              <option>Received</option>
+              <option>Failed</option>
+              <option>Unavailable</option>
+            </select>
+          </label>
+          <label class="checkline"><input id="reply-no-updates" type="checkbox"> No updates</label>
+        </div>
+        <label>Reply
+          <textarea id="reply-body" name="body" rows="4"></textarea>
+        </label>
+        <label>Source
+          <input id="reply-source" name="source" type="text" autocomplete="off">
+        </label>
+        <div class="pair">
+          <label>Requested at
+            <input id="reply-requested" name="requested" type="datetime-local">
+          </label>
+          <label>Reply seen at
+            <input id="reply-seen" name="seen" type="datetime-local">
+          </label>
+        </div>
+        <div class="row">
+          <button type="button" class="quiet" id="stamp-reply-seen">Stamp current time on reply seen at</button>
+          <button type="button" id="reply-copy-doc">Copy reply record</button>
+          <button type="button" class="quiet" id="reply-copy-sheet">Copy sheet row</button>
+        </div>
+        <label>Preview. Not saved.
+          <textarea id="reply-preview" class="preview" readonly rows="8"></textarea>
+        </label>
+        <p class="form-note" id="reply-note" role="status"></p>
+      </form>
+    </section>
+
+    <section id="checkins" aria-labelledby="checkins-title">
+      <h2 id="checkins-title">Check-ins</h2>
+      <p class="empty">No check-ins recorded. A missing reply is not a completed check-in.</p>
+      <p class="hint">Manual only. Nothing here runs on a schedule. “No updates” is a real reply. Failed, unavailable, waiting, and not yet requested are not completed check-ins.</p>
+      <form id="check-form">
+        <div class="pair">
+          <label>Assistant
+            <select id="check-who" name="who">
+              <option value="">Choose</option>
+              <option>GB</option>
+              <option>The Builder</option>
+              <option>Relay</option>
+              <option>ChatGPT (Chad)</option>
+              <option>Scout</option>
+              <option>Claude</option>
+              <option>Gemini</option>
+              <option>Muse #1</option>
+              <option>Muse #2</option>
+            </select>
+          </label>
+          <label>Entered by
+            <select id="check-entered-by" name="entered-by">
+              <option value="">Choose</option>
+              <option>Owner</option>
+              <option>GB</option>
+              <option>Relay</option>
+            </select>
+          </label>
+        </div>
+        <div class="pair">
+          <label>Status
+            <select id="check-status" name="status">
+              <option value="">Choose</option>
+              <option>Not yet requested</option>
+              <option>Waiting</option>
+              <option>Received</option>
+              <option>Failed</option>
+              <option>Unavailable</option>
+            </select>
+          </label>
+          <label class="checkline"><input id="check-no-updates" type="checkbox"> No updates</label>
+        </div>
+        <label>Recorded at
+          <input id="check-recorded" name="recorded" type="datetime-local">
+        </label>
+        <div class="row">
+          <button type="button" class="quiet" id="stamp-check">Stamp current time</button>
+        </div>
+        <label>Source
+          <input id="check-source" name="source" type="text" autocomplete="off">
+        </label>
+        <label>1. What are you working on?
+          <textarea id="check-q1" rows="2"></textarea>
+        </label>
+        <label>2. What have you completed?
+          <textarea id="check-q2" rows="2"></textarea>
+        </label>
+        <label>3. What are you waiting on?
+          <textarea id="check-q3" rows="2"></textarea>
+        </label>
+        <label>4. What is blocked?
+          <textarea id="check-q4" rows="2"></textarea>
+        </label>
+        <label>5. What do you recommend next?
+          <textarea id="check-q5" rows="2"></textarea>
+        </label>
+        <div class="row">
+          <button type="button" id="check-copy-doc">Copy check-in record</button>
+          <button type="button" class="quiet" id="check-copy-sheet">Copy sheet row</button>
+        </div>
+        <label>Preview. Not saved.
+          <textarea id="check-preview" class="preview" readonly rows="10"></textarea>
+        </label>
+        <p class="form-note" id="check-note" role="status"></p>
+      </form>
+    </section>
+
+    <section id="findings" aria-labelledby="findings-title">
+      <h2 id="findings-title">Findings and history</h2>
+      <p class="empty">No findings, decisions, or assignment history on this page.</p>
+      <p class="hint">Keep the source on the record. If something is uncertain, say so. Do not paste a private file address.</p>
+      <form id="finding-form">
+        <label>Title
+          <input id="finding-title" type="text" autocomplete="off">
+        </label>
+        <div class="pair">
+          <label>Source
+            <select id="finding-source">
+              <option value="">Choose</option>
+              <option>Owner</option>
+              <option>GB</option>
+              <option>The Builder</option>
+              <option>Relay</option>
+              <option>ChatGPT (Chad)</option>
+              <option>Scout</option>
+              <option>Claude</option>
+              <option>Gemini</option>
+              <option>Muse #1</option>
+              <option>Muse #2</option>
+            </select>
+          </label>
+          <label>Uncertainty
+            <select id="finding-uncertainty">
+              <option>Not stated</option>
+              <option>Uncertain</option>
+              <option>Confirmed by the source</option>
+            </select>
+          </label>
+        </div>
+        <label>Public source link
+          <input id="finding-link" type="url" placeholder="https://" autocomplete="off">
+        </label>
+        <label>Decision
+          <textarea id="finding-decision" rows="2"></textarea>
+        </label>
+        <label>Notes
+          <textarea id="finding-notes" rows="3"></textarea>
+        </label>
+        <div class="row">
+          <button type="button" id="finding-copy">Copy finding</button>
+          <button type="button" class="quiet" id="finding-copy-sheet">Copy sheet row</button>
+        </div>
+        <label>Preview. Not saved.
+          <textarea id="finding-preview" class="preview" readonly rows="8"></textarea>
+        </label>
+        <p class="form-note" id="finding-note" role="status"></p>
+      </form>
+    </section>
+
+    <section id="usage" aria-labelledby="usage-title">
+      <h2 id="usage-title">Usage and reliability</h2>
+      <p class="hint">This page cannot see provider accounts. A clipboard copy is not counted as a sent assignment or a reply. Empty metrics are not estimates.</p>
+      <dl class="metrics">
+        <div><dt>Assignments sent</dt><dd>Not measured</dd></div>
+        <div><dt>Replies received</dt><dd>Not measured</dd></div>
+        <div><dt>Failed or unanswered</dt><dd>Not measured</dd></div>
+        <div><dt>Retries</dt><dd>Not measured</dd></div>
+        <div><dt>Response times</dt><dd>Not measured</dd></div>
+        <div><dt>Token use</dt><dd>Not measured</dd></div>
+        <div><dt>Credit use</dt><dd>Not measured</dd></div>
+      </dl>
+    </section>
+
+    <section id="approval" aria-labelledby="approval-title">
+      <h2 id="approval-title">Waiting for Sammy</h2>
+      <p class="hint">Owner approval. Nothing in this list is marked decided.</p>
+      <ol class="decisions">
+        <li>
+          <p><strong>Assign Muse #2 a role.</strong></p>
+          <p>Not decided. Muse #2 stays separate from Muse #1.</p>
+        </li>
+        <li>
+          <p><strong>Verify the private lab Sheet and Comms Test Doc.</strong></p>
+          <p>Not verified. They are the intended shared record. This page is not connected to either file.</p>
+        </li>
+        <li>
+          <p><strong>Automatic check-ins.</strong></p>
+          <p>Not approved. None are scheduled.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section id="tools" aria-labelledby="tools-title">
+      <h2 id="tools-title">Manual tools</h2>
+      <p class="hint">Doc and Sheet addresses saved here stay in this browser. They are not the team record, they are not shared, and they are not written to the repository. Clearing site data removes them. Saving a link does not connect the board to that file.</p>
+      <div class="tool-grid">
+        <article class="card" id="card-doc">
+          <h3>Google Doc</h3>
+          <p>Intended home for the Comms Test conversation, after access is verified.</p>
+          <p class="state" id="state-doc">No Doc saved in this browser yet.</p>
+          <a class="button" id="open-doc" href="https://docs.google.com/document/create" target="_blank" rel="noopener">Create Doc</a>
+        </article>
+        <article class="card" id="card-sheet">
+          <h3>Google Sheet</h3>
+          <p>Intended home for the shared rows, after access is verified.</p>
+          <p class="state" id="state-sheet">No Sheet saved in this browser yet.</p>
+          <div class="row">
+            <a class="button" id="open-sheet" href="https://docs.google.com/spreadsheets/create" target="_blank" rel="noopener">Create Sheet</a>
+            <a class="button quiet" href="templates/tasks.csv" download>Download column headers</a>
+          </div>
+        </article>
+      </div>
+
       <form id="links">
-        <label>Doc address<input type="url" name="doc" placeholder="https://docs.google.com/document/d/..." required></label>
-        <label>Sheet address<input type="url" name="sheet" placeholder="https://docs.google.com/spreadsheets/d/..." required></label>
-        <label>Calendar address<input type="url" name="calendar" placeholder="https://calendar.google.com/calendar/..." required></label>
+        <h3>Save links in this browser</h3>
+        <label>Doc address
+          <input type="url" name="doc" placeholder="https://docs.google.com/document/d/..." autocomplete="off">
+        </label>
+        <label>Sheet address
+          <input type="url" name="sheet" placeholder="https://docs.google.com/spreadsheets/d/..." autocomplete="off">
+        </label>
         <div class="row">
           <button type="submit">Save links</button>
           <button type="button" class="quiet" id="clear-links">Clear links</button>
         </div>
         <p class="form-note" id="form-note" role="status"></p>
       </form>
-    </section>
 
-    <section class="panel">
-      <h2>Hand the rules to the team</h2>
-      <p>Paste one brief into Grok Bot and the other into Muse. ChatGPT can draft words for Sammy to copy in. ChatGPT is not a member of this team.</p>
-      <div class="row">
-        <button type="button" id="copy-grok">Show Grok Bot brief</button>
-        <button type="button" class="quiet" id="copy-muse">Show Muse brief</button>
-      </div>
-      <textarea id="brief" readonly rows="10" aria-label="Brief to paste"></textarea>
-      <p class="form-note" id="copy-note" role="status"></p>
-    </section>
-
-    <section class="split">
-      <article>
-        <h2>How a job moves</h2>
-        <ol>
-          <li>Sammy tells one teammate, in that app, what he wants.</li>
-          <li>That teammate writes the handoff in the Doc and adds a Sheet row for the other one.</li>
-          <li>The other teammate reads it, does the work, and writes the result back in the Doc.</li>
-          <li>When they need Sammy, the status is needs Sammy.</li>
-        </ol>
-      </article>
-      <article>
-        <h2>Status words</h2>
-        <ul>
-          <li><strong>open</strong> — nobody has started it.</li>
-          <li><strong>doing</strong> — someone is on it.</li>
-          <li><strong>done</strong> — finished.</li>
-          <li><strong>needs Sammy</strong> — waiting for a decision.</li>
-        </ul>
-      </article>
+      <form id="brief-form">
+        <h3>Operating notes</h3>
+        <p class="hint">Paste a note into that seat’s own app. Notes do not include file addresses.</p>
+        <label>Seat
+          <select id="brief-who">
+            <option value="">Choose</option>
+            <option value="gb">GB</option>
+            <option value="relay">Relay</option>
+            <option value="muse1">Muse #1</option>
+          </select>
+        </label>
+        <div class="row">
+          <button type="button" id="show-brief">Show operating note</button>
+        </div>
+        <label>Note
+          <textarea id="brief" class="preview" readonly rows="10"></textarea>
+        </label>
+        <p class="form-note" id="copy-note" role="status"></p>
+      </form>
     </section>
   </main>
 
   <footer>
-    <p>615 Team Board. Lab only. Not the615hideaway.com.</p>
+    <p>615 Hideaway AI Team Control Room. Public page. Not the615hideaway.com. Not a credential vault. Production data is not connected.</p>
   </footer>
   <script src="app.js"></script>
 </body>

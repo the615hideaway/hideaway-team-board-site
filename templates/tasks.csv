@@ -1,4 +1,1 @@
-Task,Owner,Status,Due,Notes
-Read the Doc and answer any handoff addressed to you,Grok Bot,open,,Write the reply in the Doc
-Read the Doc and answer any handoff addressed to you,Muse,open,,Write the reply in the Doc
-Tell Sammy the first outreach job that needs doing,Grok Bot,open,,Add the Sheet row and a Doc line for Muse or Sammy
+Record type,Title or assignment,Person,Entered by,Recorded at,Status,Source,Check-in result,Working on,Completed,Waiting on,Blocked,Recommendation,Response time,Uncertainty,Decision,Notes
