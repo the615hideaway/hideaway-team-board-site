@@ -684,7 +684,6 @@ let boardOpen = false;
 let loadingSheet = false;
 let requestSerial = 0;
 const seatViews = new Map();
-const muse1Note = document.querySelector("#muse1-note").textContent;
 resetSeats();
 
 function endpointUrl(raw) {
@@ -909,8 +908,6 @@ function resetSeats() {
     seatViews.set(name, view);
     paintSeat(view);
   }
-  const note = document.querySelector("#muse1-note");
-  if (note) note.textContent = muse1Note;
 }
 
 function historyLine(source, row, extra) {
@@ -1284,11 +1281,6 @@ function renderWorkbook(payload, warning) {
     paintSeat(view);
   }
   refreshOpenSeat();
-
-  const museRows = namedRows.some((row) => cell(row, "AI Name") === "Muse #1");
-  document.querySelector("#muse1-note").textContent = museRows
-    ? "Rows for Muse #1 on this page come from the Sheet. The board does not post."
-    : muse1Note;
 
   renderLog(
     "#checkin-log",

@@ -20,7 +20,6 @@
   <header class="top">
     <p class="eyebrow">615 Hideaway</p>
     <h1>AI Team Control Room</h1>
-    <p class="lede">The board stays closed until the team password is accepted. It lists the real roster and only activity read from the Sheet. It does not contact assistants.</p>
   </header>
 
   <nav class="nav" aria-label="Control room" hidden>
@@ -63,8 +62,6 @@
     <div id="board" hidden>
     <section id="team" aria-labelledby="team-title">
       <h2 id="team-title" tabindex="-1">Team</h2>
-      <p class="hint">Each seat stays separate. A blank card is not a claim that someone is working. Click a seat for its Sheet history.</p>
-      <p class="hint" id="muse1-note">Reports for Muse #1 currently come through the owner and are entered manually. None are recorded on this page.</p>
       <div class="seat-grid" id="seat-grid">
         <button type="button" class="seat-card is-empty" id="member-gb" data-member="GB">
           <span class="seat-role">Chief Coordinator</span>
@@ -166,6 +163,17 @@
           <span class="seat-loop" hidden>possible loop</span>
         </button>
       </div>
+    </section>
+
+    <section aria-labelledby="relay-loaded-title">
+      <h2 id="relay-loaded-title">Loaded Relay rows</h2>
+      <ul id="relay-log"><li class="empty">No Relay rows loaded.</li></ul>
+    </section>
+
+    <section id="checkins" aria-labelledby="checkins-title">
+      <h2 id="checkins-title">Check-ins</h2>
+      <p class="empty" id="checkin-empty">No check-ins recorded. A missing reply is not a completed check-in.</p>
+      <ul id="checkin-log"></ul>
     </section>
 
     <p class="limit" id="limits">The primary record is a private Google Sheet. This page reads it only through the Apps Script web app after the team password is accepted. No web app address or password is stored in the repository. Copying text does not send it or write the Sheet. Usage is not measured.</p>
@@ -364,14 +372,10 @@
         </label>
         <p class="form-note" id="reply-note" role="status"></p>
       </form>
-      <h3>Loaded Relay rows</h3>
-      <ul id="relay-log"><li class="empty">No Relay rows loaded.</li></ul>
     </section>
 
-    <section id="checkins" aria-labelledby="checkins-title">
-      <h2 id="checkins-title">Check-ins</h2>
-      <p class="empty" id="checkin-empty">No check-ins recorded. A missing reply is not a completed check-in.</p>
-      <ul id="checkin-log"></ul>
+    <section aria-labelledby="check-record-title">
+      <h2 id="check-record-title">Record a check-in</h2>
       <p class="hint">Manual only. Nothing here runs on a schedule. “No updates” is a real reply only when the status is received. Failed, unavailable, waiting, and not requested are not completed check-ins.</p>
       <form id="check-form">
         <div class="pair">
