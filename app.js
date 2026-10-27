@@ -481,7 +481,16 @@ function dirty() {
   const fields = document.querySelectorAll("textarea, input[type=text], input[type=url], input[type=password]");
   for (const field of fields) {
     if (field.readOnly) continue;
-    if (field.value.trim()) return true;
+    if (field.id === "sheet-key" || field.id === "sheet-month" || field.id === "board-month") continue;
+    const value = field.value.trim();
+    if (!value) continue;
+    if (field.id === "sheet-url") {
+      const parsed = endpointUrl(value);
+      const current = parsed ? parsed.toString() : "";
+      if (current === DEFAULT_ENDPOINT || current === savedEndpoint()) continue;
+    }
+    if (field.form && field.form.id === "links" && linkFields[field.name] && value === saved(field.name)) continue;
+    return true;
   }
   return false;
 }
