@@ -60,9 +60,9 @@ const briefs = {
   gb: [
     "You are GB, Chief Coordinator of the 615 Hideaway AI team.",
     "The owner directs the project. You organize priorities, assignments, and progress. Relay carries messages only to the assistants the owner or you select, and brings each reply back under that assistant's name.",
-    "Keep every assistant separate. Do not combine ChatGPT (Chad) with Scout. Do not combine Muse #1 with Muse #2. Do not attribute one person's work to another.",
+    "Keep every assistant separate. Do not combine ChatGPT (Chad) with Scout. Do not combine Gary with Demo. Do not attribute one person's work to another.",
     "The public control room does not contact an assistant. It reads the Sheet only through the web app after the team password is accepted, and it does not write the Sheet. Copying text does not send it. A missing reply is not a completed check-in.",
-    "Muse #1 still handles Facebook, Instagram, and Threads. Do not post to those accounts from this board. The owner enters Muse #1's reports by hand.",
+    "Gary still handles Facebook, Instagram, and Threads. Do not post to those accounts from this board. The owner enters Gary's reports by hand.",
     "You and Relay are the only seats the owner said have credential-vault access. Do not put vault contents or private file addresses on the public board or in a repository.",
     "Do not change the615hideaway.com, its repository, its database, or its deployment.",
   ].join("\n\n"),
@@ -75,8 +75,8 @@ const briefs = {
     "Do not post to Facebook, Instagram, or Threads. Do not change the615hideaway.com.",
   ].join("\n\n"),
   muse1: [
-    "You are Muse #1 on the 615 Hideaway AI team.",
-    "Your role is Facebook, Instagram, and Threads. Keep that role. You are not Muse #2.",
+    "You are Gary on the 615 Hideaway AI team.",
+    "Your role is Facebook, Instagram, and Threads. Keep that role. You are not Demo.",
     "This board does not post to those accounts. Your reports currently come through the owner and are entered manually.",
     "Do not change the615hideaway.com, its repository, its database, or its deployment.",
   ].join("\n\n"),
@@ -659,7 +659,13 @@ const ENDPOINT_KEY = "hideaway-team-endpoint";
 const SIGN_IN_KEY = "hideaway-team-sign-in";
 const DEFAULT_ENDPOINT = "https://script.google.com/macros/s/AKfycbwCvUn4sXa0tJZmM0IVMMo1xO40EFNSTl05Bqvt20vYllKrguWDFKeI_WZCHst0VZYOvQ/exec";
 const SEATS = [...document.querySelectorAll("[data-member]")].map((panel) => panel.dataset.member);
-const KNOWN_NAMES = new Set([...SEATS, "Owner"]);
+// Earlier Sheet rows still use the old names. They stay on the same seat.
+const FORMER_NAMES = {
+  Larry: "Gemini",
+  Gary: "Muse #1",
+  Demo: "Muse #2",
+};
+const KNOWN_NAMES = new Set([...SEATS, "Owner", ...Object.values(FORMER_NAMES)]);
 const STANDING_PRIORITIES = [
   "Test this control room with the real team.",
   "Relay records real replies in the Sheet, one row per assistant.",
@@ -673,10 +679,21 @@ const ROLE_TITLES = {
   "ChatGPT (Chad)": "Strategy and technical planning",
   "Scout": "Independent research and verification",
   "Claude": "Independent research",
-  "Gemini": "Independent research",
-  "Muse #1": "Facebook, Instagram, Threads",
-  "Muse #2": "Role not assigned",
+  "Larry": "Independent research",
+  "Gary": "Facebook, Instagram, Threads",
+  "Demo": "Role not assigned",
 };
+
+function sameSeat(seat, raw) {
+  return raw === seat || FORMER_NAMES[seat] === raw;
+}
+
+function displayName(raw) {
+  for (const [seat, former] of Object.entries(FORMER_NAMES)) {
+    if (raw === seat || raw === former) return seat;
+  }
+  return raw;
+}
 
 let sessionPassword = "";
 let lastGood = null;
@@ -1069,7 +1086,7 @@ function fillList(id, lines, emptyText) {
 
 function personLabel(row) {
   const name = cell(row, "AI Name");
-  return name ? `AI Name: ${name}` : "Overall";
+  return name ? `AI Name: ${displayName(name)}` : "Overall";
 }
 
 function boardLine(row) {
@@ -1269,7 +1286,7 @@ function renderWorkbook(payload, warning) {
   }
 
   for (const name of SEATS) {
-    const mine = (rows) => rows.filter((row) => cell(row, "AI Name") === name);
+    const mine = (rows) => rows.filter((row) => sameSeat(name, cell(row, "AI Name")));
     const view = buildSeatView(
       name,
       mine(checkins.missing ? [] : checkins.rows),
